@@ -75,19 +75,25 @@ var       {adjust(); return VAR;}
 "."   {adjust(); return DOT;}
 
 
-/* Identifiers */
-{_letter}+[_{alnum}]* {
+ /* Identifiers */
+[_{letter}]+[_{alnum}]* {
                          adjust();
                          yylval.sval = strdup(yytext);
                          return ID;
                        }
 
-/* Integers */
+ /* Integers */
 {digit}+ {
           adjust();
           yylval.ival = atoi(yytext);
           return INT;
        }
+
+ /* Whitespace */
+[ \t\n\r]+  { adjust(); }
+
+ /* Illegal token */
+.           { adjust(); EM_error(EM_token_pos, "illegal token"); }
 
 
 %%

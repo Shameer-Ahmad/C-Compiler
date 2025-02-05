@@ -1,0 +1,7 @@
+let 
+    var x := 42
+    var _y := 100
+    function add(a: int, b: int): int = a + b
+in
+    add(x, _y)
+end
