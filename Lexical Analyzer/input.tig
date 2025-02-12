@@ -1,5 +1,5 @@
 let 
-    var x := 42
+    var shameer11ahmad := 42
     var _y := 100
     function add(a: int, b: int): int = a + b
 in
