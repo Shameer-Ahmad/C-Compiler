@@ -1,0 +1,151 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+// External declarations for the lexer
+extern int yylex();
+extern void yyerror(const char *s);
+%}
+
+%union {
+    int ival;
+    char *sval;
+}
+
+%token <sval> ID
+%token <ival> INT
+%token PLUS MINUS TIMES DIVIDE EQ NEQ LT LE GT GE
+%token ASSIGN
+%token ARRAY IF THEN ELSE WHILE FOR TO DO LET IN END OF 
+%token BREAK NIL
+%token FUNCTION VAR TYPE
+%token LPAREN RPAREN COMMA COLON LBRACE RBRACE
+
+%type <sval> simple_var call_exp record_exp field type_dec ty var_dec func_dec var
+%type <ival> int_exp for_exp
+
+%start program
+
+%%
+
+program: exp { printf("Program\n"); }
+    ;
+
+exp: var_exp { printf("Expression: var_exp\n"); }
+    | int_exp { printf("Expression: int_exp\n"); }
+    | call_exp { printf("Expression: call_exp\n"); }
+    | op_exp { printf("Expression: op_exp\n"); }
+    | record_exp { printf("Expression: record_exp\n"); }
+    | seq_exp { printf("Expression: seq_exp\n"); }
+    | assign_exp { printf("Expression: assign_exp\n"); }
+    | if_exp { printf("Expression: if_exp\n"); }
+    | while_exp { printf("Expression: while_exp\n"); }
+    | for_exp { printf("Expression: for_exp\n"); }
+    | break_exp { printf("Expression: break_exp\n"); }
+    | let_exp { printf("Expression: let_exp\n"); }
+    ;
+
+var_exp: var { printf("Var Expression\n"); }
+    ;
+
+var: simple_var { printf("Var: simple_var\n"); $$ = $1; }
+    ;
+
+simple_var: ID { printf("Simple Var: %s\n", $1); $$ = $1; }
+    ;
+
+int_exp: INT { printf("Int Expression: %d\n", $1); $$ = $1; }
+    ;
+
+call_exp: ID LPAREN args RPAREN { printf("Call Expression: %s\n", $1); $$ = $1; }
+    ;
+
+args: /* empty */ { printf("Args: empty\n"); }
+    | exp_list { printf("Args: exp_list\n"); }
+    ;
+
+exp_list: exp { printf("Exp List: single exp\n"); }
+    | exp_list COMMA exp { printf("Exp List: multiple exps\n"); }
+    ;
+
+op_exp: exp oper exp { printf("Op Expression\n"); }
+    ;
+
+oper: PLUS { printf("Operator: PLUS\n"); }
+    | MINUS { printf("Operator: MINUS\n"); }
+    | TIMES { printf("Operator: TIMES\n"); }
+    | DIVIDE { printf("Operator: DIVIDE\n"); }
+    | EQ { printf("Operator: EQ\n"); }
+    | NEQ { printf("Operator: NEQ\n"); }
+    | LT { printf("Operator: LT\n"); }
+    | LE { printf("Operator: LE\n"); }
+    | GT { printf("Operator: GT\n"); }
+    | GE { printf("Operator: GE\n"); }
+    ;
+
+record_exp: ID LBRACE field_list RBRACE { printf("Record Expression: %s\n", $1); $$ = $1; }
+    ;
+
+field_list: /* empty */ { printf("Field List: empty\n"); }
+    | field_list_nonempty { printf("Field List: nonempty\n"); }
+    ;
+
+field_list_nonempty: field { printf("Field List Nonempty: single field\n"); }
+    | field_list_nonempty COMMA field { printf("Field List Nonempty: multiple fields\n"); }
+    ;
+
+field: ID EQ exp { printf("Field: %s\n", $1); $$ = $1; }
+    ;
+
+seq_exp: LPAREN exp_list RPAREN { printf("Seq Expression\n"); }
+    ;
+
+assign_exp: var ASSIGN exp { printf("Assign Expression\n"); }
+    ;
+
+if_exp: IF exp THEN exp ELSE exp { printf("If Expression with Else\n"); }
+    | IF exp THEN exp { printf("If Expression without Else\n"); }
+    ;
+
+while_exp: WHILE exp DO exp { printf("While Expression\n"); }
+    ;
+
+for_exp: FOR ID ASSIGN exp TO exp DO exp { printf("For Expression: %s\n", $2); $$ = $2; }
+    ;
+
+break_exp: BREAK { printf("Break Expression\n"); }
+    ;
+
+let_exp: LET dec_list IN exp_list END { printf("Let Expression\n"); }
+    ;
+
+dec_list: /* empty */ { printf("Dec List: empty\n"); }
+    | dec_list_nonempty { printf("Dec List: nonempty\n"); }
+    ;
+
+dec_list_nonempty: dec { printf("Dec List Nonempty: single dec\n"); }
+    | dec_list_nonempty dec { printf("Dec List Nonempty: multiple decs\n"); }
+    ;
+
+dec: type_dec { printf("Dec: type_dec\n"); }
+    | var_dec { printf("Dec: var_dec\n"); }
+    | func_dec { printf("Dec: func_dec\n"); }
+    ;
+
+type_dec: TYPE ID EQ ty { printf("Type Dec: %s\n", $2); $$ = $2; }
+    ;
+
+ty: ID { printf("Type: %s\n", $1); $$ = $1; }
+    | LBRACE field_list RBRACE { printf("Type: record\n"); }
+    | ARRAY OF ID { printf("Type: array of %s\n", $3); $$ = $3; }
+    ;
+
+var_dec: VAR ID ASSIGN exp { printf("Var Dec: %s\n", $2); $$ = $2; }
+    | VAR ID COLON ID ASSIGN exp { printf("Var Dec: %s with type %s\n", $2, $4); $$ = $2; }
+    ;
+
+func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp { printf("Func Dec: %s\n", $2); $$ = $2; }
+    | FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp { printf("Func Dec: %s with return type %s\n", $2, $6); $$ = $2; }
+    ;
+
+%%
