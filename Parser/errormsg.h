@@ -13,3 +13,4 @@ void EM_newline();
 void EM_error(int, string, ...);
 void EM_impossible(string, ...);
 void EM_reset(string file_name);
+void yyerror(const char *s);

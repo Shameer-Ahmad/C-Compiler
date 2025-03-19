@@ -62,3 +62,7 @@ void EM_reset(string fname) {
     }
 }
 
+void yyerror(const char *s) {
+    fprintf(stderr, "Error: %s at line %d\n", s, line_num);
+    any_errors = true;
+}
