@@ -2,24 +2,40 @@
 
 %{
 #include <string.h>
-
 #include "errormsg.h"
 #include "tokens.h"
 #include "util.h"
 
+YYSTYPE yylval;
 
-int char_pos = 1;
+int current_line = 1;
+int current_column = 1;
 
-int comment_depth = 0;
+int token_start_line;
+int token_start_column;
 
 const int INITIAL_LENGTH = 32;
 char *buffer;
 int capacity;
 
 void init_buffer(void);
-void adjust(void);
 void update_buffer(char ch);
 
+int comment_depth = 0;
+
+void mark_token_start() {
+  token_start_line = current_line;
+  token_start_column = current_column;
+}
+
+E_Pos make_pos() {
+  E_Pos pos;
+  pos.first_line = token_start_line;
+  pos.first_column = token_start_column;
+  pos.last_line = current_line;
+  pos.last_column = current_column + yyleng - 1;
+  return pos;
+}
 %}
 
 %option nounput noinput
@@ -27,249 +43,172 @@ void update_buffer(char ch);
 space [ \t]
 ws {space}+
 digit [0-9]
-id      [_a-zA-Z]+[_a-zA-Z0-9]*
+id [_a-zA-Z]+[_a-zA-Z0-9]*
 
 %%
 
- /* Whitespace */
-[ \t\r]+  { adjust(); }
+[ \t\r]+   { current_column += yyleng; }
+<INITIAL,COMMENT>\n { current_line++; current_column = 1; EM_newline(); continue; }
 
-{ws}        { adjust(); continue; }
-<INITIAL,COMMENT>\n	        { adjust(); EM_newline(); continue; }
+"of"        { mark_token_start(); yylval.pos = make_pos(); return OF; }
+"function"  { mark_token_start(); yylval.pos = make_pos(); return FUNCTION; }
+"if"        { mark_token_start(); yylval.pos = make_pos(); return IF; }
+"else"      { mark_token_start(); yylval.pos = make_pos(); return ELSE; }
+"let"       { mark_token_start(); yylval.pos = make_pos(); return LET; }
+"in"        { mark_token_start(); yylval.pos = make_pos(); return IN; }
+"end"       { mark_token_start(); yylval.pos = make_pos(); return END; }
+"for"       { mark_token_start(); yylval.pos = make_pos(); return FOR; }
+"while"     { mark_token_start(); yylval.pos = make_pos(); return WHILE; }
+"to"        { mark_token_start(); yylval.pos = make_pos(); return TO; }
+"break"     { mark_token_start(); yylval.pos = make_pos(); return BREAK; }
+"then"      { mark_token_start(); yylval.pos = make_pos(); return THEN; }
+"array"     { mark_token_start(); yylval.pos = make_pos(); return ARRAY; }
+"type"      { mark_token_start(); yylval.pos = make_pos(); return TYPE; }
+"nil"       { mark_token_start(); yylval.pos = make_pos(); return NIL; }
+"do"        { mark_token_start(); yylval.pos = make_pos(); return DO; }
+"var"       { mark_token_start(); yylval.pos = make_pos(); return VAR; }
 
+"="       { mark_token_start(); yylval.pos = make_pos(); return EQ; }
+"/"       { mark_token_start(); yylval.pos = make_pos(); return DIVIDE; }
+"<"       { mark_token_start(); yylval.pos = make_pos(); return LT; }
+"<>"      { mark_token_start(); yylval.pos = make_pos(); return NEQ; }
+"&"       { mark_token_start(); yylval.pos = make_pos(); return AND; }
+"+"       { mark_token_start(); yylval.pos = make_pos(); return PLUS; }
+":"       { mark_token_start(); yylval.pos = make_pos(); return COLON; }
+">="      { mark_token_start(); yylval.pos = make_pos(); return GE; }
+"-"       { mark_token_start(); yylval.pos = make_pos(); return MINUS; }
+":="      { mark_token_start(); yylval.pos = make_pos(); return ASSIGN; }
+"|"       { mark_token_start(); yylval.pos = make_pos(); return OR; }
+"("       { mark_token_start(); yylval.pos = make_pos(); return LPAREN; }
+")"       { mark_token_start(); yylval.pos = make_pos(); return RPAREN; }
+"{"       { mark_token_start(); yylval.pos = make_pos(); return LBRACE; }
+"}"       { mark_token_start(); yylval.pos = make_pos(); return RBRACE; }
+"<="      { mark_token_start(); yylval.pos = make_pos(); return LE; }
+"*"       { mark_token_start(); yylval.pos = make_pos(); return TIMES; }
+">"       { mark_token_start(); yylval.pos = make_pos(); return GT; }
+","       { mark_token_start(); yylval.pos = make_pos(); return COMMA; }
+"["       { mark_token_start(); yylval.pos = make_pos(); return LBRACK; }
+"]"       { mark_token_start(); yylval.pos = make_pos(); return RBRACK; }
+";"       { mark_token_start(); yylval.pos = make_pos(); return SEMICOLON; }
+"."       { mark_token_start(); yylval.pos = make_pos(); return DOT; }
 
-   /* Keywords */
-of        {adjust(); return OF;}
-function  {adjust(); return FUNCTION;}
-if        {adjust(); return IF;}
-else      {adjust(); return ELSE;}
-let       {adjust(); return LET;}
-in        {adjust(); return IN;}
-end       {adjust(); return END;}
-for       {adjust(); return FOR;}
-while     {adjust(); return WHILE;}
-to        {adjust(); return TO;}
-break     {adjust(); return BREAK;}
-then      {adjust(); return THEN;}
-array     {adjust(); return ARRAY;}
-type      {adjust(); return TYPE;}
-nil       {adjust(); return NIL;}
-do        {adjust(); return DO;}
-var       {adjust(); return VAR;}
-
-  /* Punctuation */
-"="   {adjust(); return EQ;}
-"/"   {adjust(); return DIVIDE;}
-"<"   {adjust(); return LT;}
-"<>"  {adjust(); return NEQ;}
-"&"   {adjust(); return AND;}
-"+"   {adjust(); return PLUS;}
-":"   {adjust(); return COLON;}
-">="  {adjust(); return GE;}
-"-"   {adjust(); return MINUS;}
-":="  {adjust(); return ASSIGN;}
-"|"   {adjust(); return OR;}
-"("   {adjust(); return LPAREN;}
-")"   {adjust(); return RPAREN;}
-"{"   {adjust(); return LBRACE;}
-"}"   {adjust(); return RBRACE;}
-"<="  {adjust(); return LE;}
-"*"   {adjust(); return TIMES;}
-">"   {adjust(); return GT;}
-","   {adjust(); return COMMA;}
-"["   {adjust(); return LBRACK;}
-"]"   {adjust(); return RBRACK;}
-";"   {adjust(); return SEMICOLON;}
-"."   {adjust(); return DOT;}
-
-
- /* Identifiers */
-[_a-zA-Z]+[_a-zA-Z0-9]*  {
-                         adjust();
-                         yylval.sval = strdup(yytext);
-                         return ID;
-                       }
-
- /* Integers */
 {digit}+ {
-          adjust();
-          yylval.ival = atoi(yytext);
-          return INT;
-       }
+  mark_token_start();
+  yylval.ival = atoi(yytext);
+  yylval.pos = make_pos();
+  current_column += yyleng;
+  return INT;
+}
 
-  /* Beginning of a string */
-\" {
-     adjust();
-     init_buffer();
-     BEGIN(STRING_STATE);
-   }
+{id} {
+  mark_token_start();
+  yylval.sval = strdup(yytext);
+  yylval.pos = make_pos();
+  current_column += yyleng;
+  return ID;
+}
 
-  /* Beginning of a comment */
+"\"" {
+  mark_token_start();
+  init_buffer();
+  current_column += yyleng;
+  BEGIN(STRING_STATE);
+}
+
 "/*" {
-       adjust();
-       comment_depth++;
-       BEGIN(COMMENT);
-     }
+  mark_token_start();
+  comment_depth++;
+  current_column += yyleng;
+  BEGIN(COMMENT);
+}
 
-  /* End of a comment before finding the start of a comment. Report error */
 "*/" {
-       adjust();
-       EM_error(EM_token_pos, "Comment closed before it began");
-       yyterminate();
-     }
-
- /* Illegal token */
-.           { adjust(); EM_error(EM_token_pos, "Illegal token"); }
-
-<STRING_STATE>{
-
-    /* Terminating string:  Buffer pointer with zero and copy its value */
-    \" {
-          adjust();
-          BEGIN(INITIAL);
-          yylval.sval = strdup(buffer);
-          return STRING;
-       }
-
-    /* Newline in a string produces an error */
-    \n {
-         adjust();
-         EM_error(EM_token_pos, "Newline in a string");
-         yyterminate();
-       }
-
-
-    /* Strings with \0455 are invalid */
-    \\[0-9]+ {
-               adjust();
-               EM_error(EM_token_pos, "Bad escape sequence!");
-               yyterminate();
-             }
-
-    /* Newline escape sequence. */
-    \\n {
-          adjust();
-          update_buffer('\n');
-        }
-
-    /* Tab escape sequence. */
-    \\t {
-          adjust();
-          update_buffer('\t');
-        }
-
-
-    /* The double-quote character (") inside a string. */
-    "\\\"" {
-             adjust();
-             update_buffer('"');
-           }
-
-    /* The backslash character (\) inside a string. */
-    "\\\\" {
-             adjust();
-             update_buffer('\\');
-           }
-
-    /* This matches a backslash (\) followed by one or more formatting characters 
-       (space, tab, newline, formfeed), followed by another backslash (\). */
-    \\[ \t\n\f]+\\ {
-                     adjust();
-                     /* Handle newlines correctly. */
-                     int i;
-                     for (i = 0; yytext[i]; i++) {
-                        if (yytext[i] == '\n') {
-                          EM_newline();
-                        }
-                     }
-                     continue;
-                   }
-
-    /* Catches EOF in the string state. */
-    <<EOF>> {
-              EM_error(EM_token_pos, "End of file reached before string's ending quote");
-              yyterminate();
-            }
-
-    /* Normal text. */
-    [^\\\n\"]* {
-                 adjust();
-                 char *yptr = yytext;
-                 while (*yptr) {
-                   update_buffer(*yptr++);
-                 }
-               }
-
+  mark_token_start();
+  EM_error(make_pos(), "Comment closed before it began");
+  yyterminate();
 }
 
+. { mark_token_start(); EM_error(make_pos(), "Illegal token"); current_column += yyleng; }
 
-<COMMENT>{
-
-    "/*" {
-           adjust();
-           comment_depth++;
-           continue;
-         }
-
-    /* When a comments closes we decrease the depth. A depth of zero makes us
-       switch out of the COMMENT state */
-    "*/" {
-           adjust();
-           comment_depth--;
-           if (comment_depth == 0) {
-             BEGIN(INITIAL);
-           }
-         }
-
-    /* Reaching EOF inside a comment */
-    <<EOF>> {
-              EM_error(EM_token_pos, "EOF reached without finishing comment");
-              yyterminate();
-            }
-
-    /* Ignore everything else inside a comment */
-    . {
-        adjust();
-      }
-
+<STRING_STATE>\" {
+  current_column += yyleng;
+  BEGIN(INITIAL);
+  yylval.sval = strdup(buffer);
+  yylval.pos = make_pos();
+  return STRING;
 }
 
+<STRING_STATE>\n {
+  EM_error(make_pos(), "Newline in a string");
+  yyterminate();
+}
+
+<STRING_STATE>\\[0-9]+ {
+  EM_error(make_pos(), "Bad escape sequence!");
+  yyterminate();
+}
+
+<STRING_STATE>\\n { update_buffer('\n'); current_column += yyleng; }
+<STRING_STATE>\\t { update_buffer('\t'); current_column += yyleng; }
+<STRING_STATE>\\\" { update_buffer('"'); current_column += yyleng; }
+<STRING_STATE>\\\\ { update_buffer('\\'); current_column += yyleng; }
+<STRING_STATE>\\[ \t\n\f]+\\ {
+  for (int i = 0; yytext[i]; i++) {
+    if (yytext[i] == '\n') EM_newline();
+  }
+  current_column += yyleng;
+  continue;
+}
+
+<STRING_STATE><<EOF>> {
+  EM_error(make_pos(), "End of file reached before string's ending quote");
+  yyterminate();
+}
+
+<STRING_STATE>[^\\\n\"]* {
+  char *yptr = yytext;
+  while (*yptr) {
+    update_buffer(*yptr++);
+  }
+  current_column += yyleng;
+}
+
+<COMMENT>"/*" { comment_depth++; current_column += yyleng; continue; }
+<COMMENT>"*/" {
+  comment_depth--;
+  if (comment_depth == 0) BEGIN(INITIAL);
+  current_column += yyleng;
+}
+<COMMENT><<EOF>> {
+  EM_error(make_pos(), "EOF reached without finishing comment");
+  yyterminate();
+}
+<COMMENT>. { current_column += yyleng; }
 
 %%
 
 int yywrap() {
-    char_pos = 1;
-    return 1;
+  return 1;
 }
 
-void adjust() {
-    EM_token_pos = char_pos;
-    char_pos += yyleng;
-}
-
-void init_buffer(void)
-{
+void init_buffer(void) {
   buffer = malloc_checked(INITIAL_LENGTH);
   buffer[0] = 0;
   capacity = INITIAL_LENGTH;
 }
 
-/* Add chararacter to buffer and double the length if capacity is reached */
- 
-void update_buffer(char ch)
-{
-    size_t new_length = strlen(buffer) + 1;
-    if (new_length == capacity)
-    {
-        char *temp;
-
-        capacity *= 2;
-        temp = malloc_checked(capacity);
-        memcpy(temp, buffer, new_length);
-        free(buffer);
-        buffer = temp;
-    }
-    buffer[new_length - 1] = ch;
-    buffer[new_length] = 0;
+void update_buffer(char ch) {
+  size_t new_length = strlen(buffer) + 1;
+  if (new_length == capacity) {
+    char *temp;
+    capacity *= 2;
+    temp = malloc_checked(capacity);
+    memcpy(temp, buffer, new_length);
+    free(buffer);
+    buffer = temp;
+  }
+  buffer[new_length - 1] = ch;
+  buffer[new_length] = 0;
 }
+
 

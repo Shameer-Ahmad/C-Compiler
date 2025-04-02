@@ -1,6 +1,9 @@
-typedef union  {
+#include "errormsg.h"
+
+typedef union {
     int ival;
     string sval;
+    E_Pos pos;
 } YYSTYPE;
 
 extern YYSTYPE yylval;
