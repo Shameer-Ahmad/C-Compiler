@@ -5,7 +5,7 @@
 #include "tokens.h"
 #include "util.h"
 
-YYSTYPE yylval;
+extern YYSTYPE yylval;
 
 int yylex(); /* prototype for the lexing function */
 
@@ -30,7 +30,6 @@ int main(int argc, char ** argv) {
     }
     EM_reset(argv[1]);
     while ((token = yylex())) {
-        E_Pos pos = yylval.pos;
         switch (token) {
             case ID:
             case STRING:

@@ -10,6 +10,8 @@ typedef struct E_Pos_ {
   int last_column;
 } E_Pos;
 
+extern E_Pos pos;
+
 extern bool EM_any_errors;
 
 void EM_error(E_Pos, string, ...);
