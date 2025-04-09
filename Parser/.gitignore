@@ -1,3 +1,6 @@
 *.o
 lextest
+tiger.tab.c
+tiger.tab.h
+lex.yy.c
 
