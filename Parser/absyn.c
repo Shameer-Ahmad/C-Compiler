@@ -76,7 +76,7 @@ A_Exp make_A_CallExp(A_Pos pos, S_Symbol func, A_ExpList args) {
     return p;
 }
 
-A_Exp make_A_OpExp(A_Pos pos, A_Oper oper, A_Exp left, A_Exp right) {
+A_Exp make_A_OpExp(A_Pos pos, A_oper oper, A_Exp left, A_Exp right) {
     A_Exp p = malloc_checked(sizeof(*p));
     p->kind = A_OP_EXP;
     p->pos = pos;
