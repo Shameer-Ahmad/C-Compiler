@@ -55,7 +55,7 @@
 #define YYSKELETON_NAME "yacc.c"
 
 /* Pure parsers.  */
-#define YYPURE 0
+#define YYPURE 2
 
 /* Push parsers.  */
 #define YYPUSH 0
@@ -74,10 +74,9 @@
 #include "absyn.h"
 #include "symbol.h"
 
-extern int yylex();
-extern void yyerror(const char *s);
+void yyerror(E_Pos *locp, const char *s);
 
-#line 81 "tiger.tab.c"
+#line 80 "tiger.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -142,43 +141,54 @@ enum yysymbol_kind_t
   YYSYMBOL_RPAREN = 34,                    /* RPAREN  */
   YYSYMBOL_COMMA = 35,                     /* COMMA  */
   YYSYMBOL_COLON = 36,                     /* COLON  */
-  YYSYMBOL_LBRACE = 37,                    /* LBRACE  */
-  YYSYMBOL_RBRACE = 38,                    /* RBRACE  */
-  YYSYMBOL_LOW_PRECEDENCE = 39,            /* LOW_PRECEDENCE  */
-  YYSYMBOL_LOWER_THAN_ELSE = 40,           /* LOWER_THAN_ELSE  */
-  YYSYMBOL_YYACCEPT = 41,                  /* $accept  */
-  YYSYMBOL_program = 42,                   /* program  */
-  YYSYMBOL_exp = 43,                       /* exp  */
-  YYSYMBOL_var_exp = 44,                   /* var_exp  */
-  YYSYMBOL_var = 45,                       /* var  */
-  YYSYMBOL_simple_var = 46,                /* simple_var  */
-  YYSYMBOL_int_exp = 47,                   /* int_exp  */
-  YYSYMBOL_call_exp = 48,                  /* call_exp  */
-  YYSYMBOL_args = 49,                      /* args  */
-  YYSYMBOL_exp_list = 50,                  /* exp_list  */
-  YYSYMBOL_record_exp = 51,                /* record_exp  */
-  YYSYMBOL_field_list = 52,                /* field_list  */
-  YYSYMBOL_field_list_nonempty = 53,       /* field_list_nonempty  */
-  YYSYMBOL_field = 54,                     /* field  */
-  YYSYMBOL_seq_exp = 55,                   /* seq_exp  */
-  YYSYMBOL_assign_exp = 56,                /* assign_exp  */
-  YYSYMBOL_if_exp = 57,                    /* if_exp  */
-  YYSYMBOL_while_exp = 58,                 /* while_exp  */
-  YYSYMBOL_for_exp = 59,                   /* for_exp  */
-  YYSYMBOL_break_exp = 60,                 /* break_exp  */
-  YYSYMBOL_let_exp = 61,                   /* let_exp  */
-  YYSYMBOL_dec_list = 62,                  /* dec_list  */
-  YYSYMBOL_dec_list_nonempty = 63,         /* dec_list_nonempty  */
-  YYSYMBOL_dec = 64,                       /* dec  */
-  YYSYMBOL_type_dec = 65,                  /* type_dec  */
-  YYSYMBOL_ty = 66,                        /* ty  */
-  YYSYMBOL_var_dec = 67,                   /* var_dec  */
-  YYSYMBOL_func_dec = 68                   /* func_dec  */
+  YYSYMBOL_SEMICOLON = 37,                 /* SEMICOLON  */
+  YYSYMBOL_LBRACE = 38,                    /* LBRACE  */
+  YYSYMBOL_RBRACE = 39,                    /* RBRACE  */
+  YYSYMBOL_LOW_PRECEDENCE = 40,            /* LOW_PRECEDENCE  */
+  YYSYMBOL_LOWER_THAN_ELSE = 41,           /* LOWER_THAN_ELSE  */
+  YYSYMBOL_YYACCEPT = 42,                  /* $accept  */
+  YYSYMBOL_program = 43,                   /* program  */
+  YYSYMBOL_exp = 44,                       /* exp  */
+  YYSYMBOL_var_exp = 45,                   /* var_exp  */
+  YYSYMBOL_var = 46,                       /* var  */
+  YYSYMBOL_simple_var = 47,                /* simple_var  */
+  YYSYMBOL_int_exp = 48,                   /* int_exp  */
+  YYSYMBOL_call_exp = 49,                  /* call_exp  */
+  YYSYMBOL_args = 50,                      /* args  */
+  YYSYMBOL_exp_list = 51,                  /* exp_list  */
+  YYSYMBOL_exp_seq = 52,                   /* exp_seq  */
+  YYSYMBOL_record_exp = 53,                /* record_exp  */
+  YYSYMBOL_field_list = 54,                /* field_list  */
+  YYSYMBOL_field_list_nonempty = 55,       /* field_list_nonempty  */
+  YYSYMBOL_field = 56,                     /* field  */
+  YYSYMBOL_efield_list = 57,               /* efield_list  */
+  YYSYMBOL_efield_list_nonempty = 58,      /* efield_list_nonempty  */
+  YYSYMBOL_efield = 59,                    /* efield  */
+  YYSYMBOL_seq_exp = 60,                   /* seq_exp  */
+  YYSYMBOL_assign_exp = 61,                /* assign_exp  */
+  YYSYMBOL_if_exp = 62,                    /* if_exp  */
+  YYSYMBOL_while_exp = 63,                 /* while_exp  */
+  YYSYMBOL_for_exp = 64,                   /* for_exp  */
+  YYSYMBOL_break_exp = 65,                 /* break_exp  */
+  YYSYMBOL_let_exp = 66,                   /* let_exp  */
+  YYSYMBOL_dec_list = 67,                  /* dec_list  */
+  YYSYMBOL_dec_list_nonempty = 68,         /* dec_list_nonempty  */
+  YYSYMBOL_dec = 69,                       /* dec  */
+  YYSYMBOL_type_dec = 70,                  /* type_dec  */
+  YYSYMBOL_ty = 71,                        /* ty  */
+  YYSYMBOL_var_dec = 72,                   /* var_dec  */
+  YYSYMBOL_func_dec = 73                   /* func_dec  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 
+/* Unqualified %code blocks.  */
+#line 10 "tiger.grm"
+
+    int yylex(YYSTYPE*, YYLTYPE*);
+
+#line 192 "tiger.tab.c"
 
 #ifdef short
 # undef short
@@ -371,7 +381,7 @@ typedef int yy_state_fast_t;
 
 #define YY_ASSERT(E) ((void) (0 && (E)))
 
-#if !defined yyoverflow
+#if 1
 
 /* The parser invokes alloca or malloc; define the necessary symbols.  */
 
@@ -436,7 +446,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 #   endif
 #  endif
 # endif
-#endif /* !defined yyoverflow */
+#endif /* 1 */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
@@ -504,19 +514,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  40
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   107
+#define YYLAST   117
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  41
+#define YYNTOKENS  42
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  28
+#define YYNNTS  32
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  55
+#define YYNRULES  62
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  109
+#define YYNSTATES  119
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   295
+#define YYMAXUTOK   296
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -559,55 +569,54 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40
+      35,    36,    37,    38,    39,    40,    41
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    62,    63,    64,    65,    66,    67,    68,
-      69,    70,    71,    72,    73,    74,    75,    76,    78,    80,
-      82,    84,    86,    88,    89,    92,    93,    96,    99,   100,
-     103,   104,   107,   110,   113,   116,   117,   120,   123,   126,
-     129,   132,   133,   136,   137,   140,   141,   142,   145,   148,
-     149,   150,   153,   154,   157,   158
+       0,    69,    69,    71,    72,    73,    74,    75,    76,    77,
+      78,    79,    80,    81,    82,    83,    84,    85,    87,    89,
+      91,    93,    95,    97,    98,   101,   102,   105,   106,   109,
+     112,   113,   116,   117,   120,   122,   123,   126,   127,   130,
+     133,   136,   139,   140,   143,   146,   149,   152,   155,   156,
+     159,   160,   163,   164,   165,   168,   171,   172,   173,   176,
+     177,   180,   183
 };
 #endif
 
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if YYDEBUG || 0
+#if 1
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 
-/* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
-   First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
-static const char *const yytname[] =
-{
-  "\"end of file\"", "error", "\"invalid token\"", "ID", "INT", "PLUS",
-  "MINUS", "TIMES", "DIVIDE", "EQ", "NEQ", "LT", "LE", "GT", "GE",
-  "ASSIGN", "ARRAY", "IF", "THEN", "ELSE", "WHILE", "FOR", "TO", "DO",
-  "LET", "IN", "END", "OF", "BREAK", "NIL", "FUNCTION", "VAR", "TYPE",
-  "LPAREN", "RPAREN", "COMMA", "COLON", "LBRACE", "RBRACE",
-  "LOW_PRECEDENCE", "LOWER_THAN_ELSE", "$accept", "program", "exp",
-  "var_exp", "var", "simple_var", "int_exp", "call_exp", "args",
-  "exp_list", "record_exp", "field_list", "field_list_nonempty", "field",
-  "seq_exp", "assign_exp", "if_exp", "while_exp", "for_exp", "break_exp",
-  "let_exp", "dec_list", "dec_list_nonempty", "dec", "type_dec", "ty",
-  "var_dec", "func_dec", YY_NULLPTR
-};
-
 static const char *
 yysymbol_name (yysymbol_kind_t yysymbol)
 {
-  return yytname[yysymbol];
+  static const char *const yy_sname[] =
+  {
+  "end of file", "error", "invalid token", "ID", "INT", "PLUS", "MINUS",
+  "TIMES", "DIVIDE", "EQ", "NEQ", "LT", "LE", "GT", "GE", "ASSIGN",
+  "ARRAY", "IF", "THEN", "ELSE", "WHILE", "FOR", "TO", "DO", "LET", "IN",
+  "END", "OF", "BREAK", "NIL", "FUNCTION", "VAR", "TYPE", "LPAREN",
+  "RPAREN", "COMMA", "COLON", "SEMICOLON", "LBRACE", "RBRACE",
+  "LOW_PRECEDENCE", "LOWER_THAN_ELSE", "$accept", "program", "exp",
+  "var_exp", "var", "simple_var", "int_exp", "call_exp", "args",
+  "exp_list", "exp_seq", "record_exp", "field_list", "field_list_nonempty",
+  "field", "efield_list", "efield_list_nonempty", "efield", "seq_exp",
+  "assign_exp", "if_exp", "while_exp", "for_exp", "break_exp", "let_exp",
+  "dec_list", "dec_list_nonempty", "dec", "type_dec", "ty", "var_dec",
+  "func_dec", YY_NULLPTR
+  };
+  return yy_sname[yysymbol];
 }
 #endif
 
-#define YYPACT_NINF (-60)
+#define YYPACT_NINF (-14)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -621,17 +630,18 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       4,    18,   -60,     4,     4,     6,     8,   -60,     4,    31,
-      65,   -60,    35,   -60,   -60,   -60,   -60,   -60,   -60,   -60,
-     -60,   -60,   -60,   -60,     4,    57,    51,    11,    50,    63,
-      64,    71,    52,     8,   -60,   -60,   -60,   -60,    65,   -12,
-     -60,     4,     4,     4,     4,     4,    42,    43,    70,    46,
-      45,   -60,     4,     4,     4,    48,   -10,    76,     4,   -60,
-     -60,     4,    55,    55,   -60,   -60,   -60,   -60,     4,   -60,
-      57,    67,   -60,     5,    57,     4,    84,    -2,    -6,    65,
-      65,   -60,     4,     4,    54,    65,    74,   -60,    66,    57,
-     -60,   -60,   -60,    41,    -3,     4,    87,    53,     4,     4,
-      89,    65,   -60,   -60,   -60,    65,    85,     4,    65
+       2,    18,   -14,     2,     2,    17,    34,   -14,     2,    13,
+      52,   -14,    37,   -14,   -14,   -14,   -14,   -14,   -14,   -14,
+     -14,   -14,   -14,   -14,     2,    58,    32,     4,    53,    64,
+      68,    69,    48,    34,   -14,   -14,   -14,   -14,    52,   -13,
+     -14,     2,     2,     2,     2,     2,    52,    40,    43,    66,
+      42,    44,   -14,     2,     2,     2,    47,    -8,    67,     2,
+     -14,   -14,     2,    24,    24,   -14,   -14,   -14,   -14,     2,
+       2,   -14,    58,    63,   -14,    41,    80,     2,    81,    -2,
+      -1,    52,    52,    52,   -14,     2,     2,    51,    54,    55,
+     -14,    52,    74,   -14,    65,    80,   -14,   -14,   -14,    10,
+      88,    -7,    80,     2,    90,    56,     2,   -14,     2,    91,
+     -14,    52,   -14,   -14,   -14,    52,    87,     2,    52
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -639,33 +649,36 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    20,    21,     0,     0,     0,    41,    39,     0,     0,
+       0,    20,    21,     0,     0,     0,    48,    46,     0,     0,
        2,     3,    18,    19,     4,     5,    10,    11,    12,    13,
-      14,    15,    16,    17,    23,    28,     0,     0,     0,     0,
-       0,     0,     0,    42,    43,    45,    46,    47,    25,     0,
-       1,     0,     0,     0,     0,     0,     0,    24,     0,     0,
-      29,    30,     0,     0,     0,     0,     0,     0,     0,    44,
-      33,     0,     6,     7,     8,     9,    34,    22,     0,    27,
-       0,    35,    37,     0,    28,     0,     0,     0,     0,    26,
-      32,    31,     0,     0,     0,    52,     0,    49,     0,    28,
-      48,    40,    36,     0,     0,     0,     0,     0,     0,     0,
-       0,    53,    51,    50,    38,    54,     0,     0,    55
+      14,    15,    16,    17,    23,    35,     0,     0,     0,     0,
+       0,     0,     0,    49,    50,    52,    53,    54,    27,     0,
+       1,     0,     0,     0,     0,     0,    25,     0,    24,     0,
+       0,    36,    37,     0,     0,     0,     0,     0,     0,     0,
+      51,    40,     0,     6,     7,     8,     9,    41,    22,     0,
+       0,    29,     0,    42,    44,     0,    30,     0,     0,     0,
+       0,    28,    26,    39,    38,     0,     0,     0,     0,    31,
+      32,    59,     0,    56,     0,    30,    55,    47,    43,     0,
+       0,     0,     0,     0,     0,     0,     0,    34,     0,     0,
+      33,    60,    58,    57,    45,    61,     0,     0,    62
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -60,   -60,     0,   -60,   -60,   -60,   -60,   -60,   -60,   -22,
-     -60,   -59,   -60,    26,   -60,   -60,   -60,   -60,   -60,   -60,
-     -60,   -60,   -60,    68,   -60,   -60,   -60,   -60
+     -14,   -14,     0,   -14,   -14,   -14,   -14,   -14,   -14,    38,
+     -14,   -14,     3,   -14,    -3,   -14,   -14,    28,   -14,   -14,
+     -14,   -14,   -14,   -14,   -14,   -14,   -14,    71,   -14,   -14,
+     -14,   -14
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     9,    38,    11,    12,    13,    14,    15,    46,    39,
-      16,    49,    50,    51,    17,    18,    19,    20,    21,    22,
-      23,    32,    33,    34,    35,    90,    36,    37
+       0,     9,    46,    11,    12,    13,    14,    15,    47,    48,
+      39,    16,    88,    89,    90,    50,    51,    52,    17,    18,
+      19,    20,    21,    22,    23,    32,    33,    34,    35,    96,
+      36,    37
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -673,60 +686,64 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      10,    87,    47,    26,    27,    75,    99,     1,     2,    28,
-      41,    42,    43,    44,    88,    84,    41,    42,    43,    44,
-      91,     3,    60,    61,     4,     5,    76,    83,     6,    61,
-      97,    40,     7,   100,    53,    89,    78,     8,    29,    30,
-      31,    62,    63,    64,    65,    66,    41,    42,    43,    44,
-      45,    24,    71,    72,    73,    25,    41,    42,    43,    44,
-      48,    79,    43,    44,    98,    54,    55,    56,    80,    52,
-      41,    42,    43,    44,    57,    85,    67,    58,    61,    68,
-      70,    74,    92,    93,    69,    77,    82,    86,    94,    95,
-     102,   103,   106,    96,   107,   101,    81,     0,   104,   105,
-       0,    59,     0,     0,     0,     0,     0,   108
+      10,    93,   108,    26,    27,     1,     2,    77,    38,    41,
+      42,    43,    44,    40,    94,    41,    42,    43,    44,     3,
+      28,    61,     4,     5,    62,    97,     6,    54,    78,   109,
+       7,    43,    44,   106,    69,     8,    95,    41,    42,    43,
+      44,    63,    64,    65,    66,    67,    41,    42,    43,    44,
+      53,    24,    45,    73,    74,    75,    25,    41,    42,    43,
+      44,    49,    81,    86,    29,    30,    31,    56,    55,    82,
+      83,    57,    58,    59,    68,    70,    79,    91,    69,    72,
+      76,    71,    85,    87,    92,    98,    99,   100,   101,   103,
+     102,   107,   104,   112,   116,   113,   117,    80,   105,   110,
+      84,     0,     0,   111,    60,     0,   114,     0,   115,     0,
+       0,     0,     0,     0,     0,     0,     0,   118
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     3,    24,     3,     4,    15,     9,     3,     4,     3,
-       5,     6,     7,     8,    16,    74,     5,     6,     7,     8,
-      26,    17,    34,    35,    20,    21,    36,    22,    24,    35,
-      89,     0,    28,    36,    23,    37,    58,    33,    30,    31,
-      32,    41,    42,    43,    44,    45,     5,     6,     7,     8,
-      15,    33,    52,    53,    54,    37,     5,     6,     7,     8,
-       3,    61,     7,     8,    23,    15,     3,     3,    68,    18,
-       5,     6,     7,     8,     3,    75,    34,    25,    35,     9,
-      35,    33,    82,    83,    38,     9,    19,     3,    34,    15,
-       3,    38,     3,    27,     9,    95,    70,    -1,    98,    99,
-      -1,    33,    -1,    -1,    -1,    -1,    -1,   107
+       0,     3,     9,     3,     4,     3,     4,    15,     8,     5,
+       6,     7,     8,     0,    16,     5,     6,     7,     8,    17,
+       3,    34,    20,    21,    37,    26,    24,    23,    36,    36,
+      28,     7,     8,    23,    35,    33,    38,     5,     6,     7,
+       8,    41,    42,    43,    44,    45,     5,     6,     7,     8,
+      18,    33,    15,    53,    54,    55,    38,     5,     6,     7,
+       8,     3,    62,    22,    30,    31,    32,     3,    15,    69,
+      70,     3,     3,    25,    34,     9,     9,    77,    35,    35,
+      33,    39,    19,     3,     3,    85,    86,    36,    34,    15,
+      35,     3,    27,     3,     3,    39,     9,    59,    95,   102,
+      72,    -1,    -1,   103,    33,    -1,   106,    -1,   108,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,   117
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     4,    17,    20,    21,    24,    28,    33,    42,
-      43,    44,    45,    46,    47,    48,    51,    55,    56,    57,
-      58,    59,    60,    61,    33,    37,    43,    43,     3,    30,
-      31,    32,    62,    63,    64,    65,    67,    68,    43,    50,
-       0,     5,     6,     7,     8,    15,    49,    50,     3,    52,
-      53,    54,    18,    23,    15,     3,     3,     3,    25,    64,
-      34,    35,    43,    43,    43,    43,    43,    34,     9,    38,
-      35,    43,    43,    43,    33,    15,    36,     9,    50,    43,
-      43,    54,    19,    22,    52,    43,     3,     3,    16,    37,
-      66,    26,    43,    43,    34,    15,    27,    52,    23,     9,
-      36,    43,     3,    38,    43,    43,     3,     9,    43
+       0,     3,     4,    17,    20,    21,    24,    28,    33,    43,
+      44,    45,    46,    47,    48,    49,    53,    60,    61,    62,
+      63,    64,    65,    66,    33,    38,    44,    44,     3,    30,
+      31,    32,    67,    68,    69,    70,    72,    73,    44,    52,
+       0,     5,     6,     7,     8,    15,    44,    50,    51,     3,
+      57,    58,    59,    18,    23,    15,     3,     3,     3,    25,
+      69,    34,    37,    44,    44,    44,    44,    44,    34,    35,
+       9,    39,    35,    44,    44,    44,    33,    15,    36,     9,
+      51,    44,    44,    44,    59,    19,    22,     3,    54,    55,
+      56,    44,     3,     3,    16,    38,    71,    26,    44,    44,
+      36,    34,    35,    15,    27,    54,    23,     3,     9,    36,
+      56,    44,     3,    39,    44,    44,     3,     9,    44
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    41,    42,    43,    43,    43,    43,    43,    43,    43,
-      43,    43,    43,    43,    43,    43,    43,    43,    44,    45,
-      46,    47,    48,    49,    49,    50,    50,    51,    52,    52,
-      53,    53,    54,    55,    56,    57,    57,    58,    59,    60,
-      61,    62,    62,    63,    63,    64,    64,    64,    65,    66,
-      66,    66,    67,    67,    68,    68
+       0,    42,    43,    44,    44,    44,    44,    44,    44,    44,
+      44,    44,    44,    44,    44,    44,    44,    44,    45,    46,
+      47,    48,    49,    50,    50,    51,    51,    52,    52,    53,
+      54,    54,    55,    55,    56,    57,    57,    58,    58,    59,
+      60,    61,    62,    62,    63,    64,    65,    66,    67,    67,
+      68,    68,    69,    69,    69,    70,    71,    71,    71,    72,
+      72,    73,    73
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -734,10 +751,11 @@ static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     1,     1,     1,     3,     3,     3,     3,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     4,     0,     1,     1,     3,     4,     0,     1,
-       1,     3,     3,     3,     3,     4,     6,     4,     8,     1,
-       5,     0,     1,     1,     2,     1,     1,     1,     4,     1,
-       3,     3,     4,     6,     7,     9
+       1,     1,     4,     0,     1,     1,     3,     1,     3,     4,
+       0,     1,     1,     3,     3,     0,     1,     1,     3,     3,
+       3,     3,     4,     6,     4,     8,     1,     5,     0,     1,
+       1,     2,     1,     1,     1,     4,     1,     3,     3,     4,
+       6,     7,     9
 };
 
 
@@ -766,7 +784,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (YY_("syntax error: cannot back up")); \
+        yyerror (&yylloc, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -1007,8 +1025,227 @@ int yydebug;
 #endif
 
 
+/* Context of a parse error.  */
+typedef struct
+{
+  yy_state_t *yyssp;
+  yysymbol_kind_t yytoken;
+  YYLTYPE *yylloc;
+} yypcontext_t;
+
+/* Put in YYARG at most YYARGN of the expected tokens given the
+   current YYCTX, and return the number of tokens stored in YYARG.  If
+   YYARG is null, return the number of expected tokens (guaranteed to
+   be less than YYNTOKENS).  Return YYENOMEM on memory exhaustion.
+   Return 0 if there are more than YYARGN expected tokens, yet fill
+   YYARG up to YYARGN. */
+static int
+yypcontext_expected_tokens (const yypcontext_t *yyctx,
+                            yysymbol_kind_t yyarg[], int yyargn)
+{
+  /* Actual size of YYARG. */
+  int yycount = 0;
+  int yyn = yypact[+*yyctx->yyssp];
+  if (!yypact_value_is_default (yyn))
+    {
+      /* Start YYX at -YYN if negative to avoid negative indexes in
+         YYCHECK.  In other words, skip the first -YYN actions for
+         this state because they are default actions.  */
+      int yyxbegin = yyn < 0 ? -yyn : 0;
+      /* Stay within bounds of both yycheck and yytname.  */
+      int yychecklim = YYLAST - yyn + 1;
+      int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
+      int yyx;
+      for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+        if (yycheck[yyx + yyn] == yyx && yyx != YYSYMBOL_YYerror
+            && !yytable_value_is_error (yytable[yyx + yyn]))
+          {
+            if (!yyarg)
+              ++yycount;
+            else if (yycount == yyargn)
+              return 0;
+            else
+              yyarg[yycount++] = YY_CAST (yysymbol_kind_t, yyx);
+          }
+    }
+  if (yyarg && yycount == 0 && 0 < yyargn)
+    yyarg[0] = YYSYMBOL_YYEMPTY;
+  return yycount;
+}
 
 
+
+
+#ifndef yystrlen
+# if defined __GLIBC__ && defined _STRING_H
+#  define yystrlen(S) (YY_CAST (YYPTRDIFF_T, strlen (S)))
+# else
+/* Return the length of YYSTR.  */
+static YYPTRDIFF_T
+yystrlen (const char *yystr)
+{
+  YYPTRDIFF_T yylen;
+  for (yylen = 0; yystr[yylen]; yylen++)
+    continue;
+  return yylen;
+}
+# endif
+#endif
+
+#ifndef yystpcpy
+# if defined __GLIBC__ && defined _STRING_H && defined _GNU_SOURCE
+#  define yystpcpy stpcpy
+# else
+/* Copy YYSRC to YYDEST, returning the address of the terminating '\0' in
+   YYDEST.  */
+static char *
+yystpcpy (char *yydest, const char *yysrc)
+{
+  char *yyd = yydest;
+  const char *yys = yysrc;
+
+  while ((*yyd++ = *yys++) != '\0')
+    continue;
+
+  return yyd - 1;
+}
+# endif
+#endif
+
+
+
+static int
+yy_syntax_error_arguments (const yypcontext_t *yyctx,
+                           yysymbol_kind_t yyarg[], int yyargn)
+{
+  /* Actual size of YYARG. */
+  int yycount = 0;
+  /* There are many possibilities here to consider:
+     - If this state is a consistent state with a default action, then
+       the only way this function was invoked is if the default action
+       is an error action.  In that case, don't check for expected
+       tokens because there are none.
+     - The only way there can be no lookahead present (in yychar) is if
+       this state is a consistent state with a default action.  Thus,
+       detecting the absence of a lookahead is sufficient to determine
+       that there is no unexpected or expected token to report.  In that
+       case, just report a simple "syntax error".
+     - Don't assume there isn't a lookahead just because this state is a
+       consistent state with a default action.  There might have been a
+       previous inconsistent state, consistent state with a non-default
+       action, or user semantic action that manipulated yychar.
+     - Of course, the expected token list depends on states to have
+       correct lookahead information, and it depends on the parser not
+       to perform extra reductions after fetching a lookahead from the
+       scanner and before detecting a syntax error.  Thus, state merging
+       (from LALR or IELR) and default reductions corrupt the expected
+       token list.  However, the list is correct for canonical LR with
+       one exception: it will still contain any token that will not be
+       accepted due to an error action in a later state.
+  */
+  if (yyctx->yytoken != YYSYMBOL_YYEMPTY)
+    {
+      int yyn;
+      if (yyarg)
+        yyarg[yycount] = yyctx->yytoken;
+      ++yycount;
+      yyn = yypcontext_expected_tokens (yyctx,
+                                        yyarg ? yyarg + 1 : yyarg, yyargn - 1);
+      if (yyn == YYENOMEM)
+        return YYENOMEM;
+      else
+        yycount += yyn;
+    }
+  return yycount;
+}
+
+/* Copy into *YYMSG, which is of size *YYMSG_ALLOC, an error message
+   about the unexpected token YYTOKEN for the state stack whose top is
+   YYSSP.
+
+   Return 0 if *YYMSG was successfully written.  Return -1 if *YYMSG is
+   not large enough to hold the message.  In that case, also set
+   *YYMSG_ALLOC to the required number of bytes.  Return YYENOMEM if the
+   required number of bytes is too large to store.  */
+static int
+yysyntax_error (YYPTRDIFF_T *yymsg_alloc, char **yymsg,
+                const yypcontext_t *yyctx)
+{
+  enum { YYARGS_MAX = 5 };
+  /* Internationalized format string. */
+  const char *yyformat = YY_NULLPTR;
+  /* Arguments of yyformat: reported tokens (one for the "unexpected",
+     one per "expected"). */
+  yysymbol_kind_t yyarg[YYARGS_MAX];
+  /* Cumulated lengths of YYARG.  */
+  YYPTRDIFF_T yysize = 0;
+
+  /* Actual size of YYARG. */
+  int yycount = yy_syntax_error_arguments (yyctx, yyarg, YYARGS_MAX);
+  if (yycount == YYENOMEM)
+    return YYENOMEM;
+
+  switch (yycount)
+    {
+#define YYCASE_(N, S)                       \
+      case N:                               \
+        yyformat = S;                       \
+        break
+    default: /* Avoid compiler warnings. */
+      YYCASE_(0, YY_("syntax error"));
+      YYCASE_(1, YY_("syntax error, unexpected %s"));
+      YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+      YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+      YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+      YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+#undef YYCASE_
+    }
+
+  /* Compute error message size.  Don't count the "%s"s, but reserve
+     room for the terminator.  */
+  yysize = yystrlen (yyformat) - 2 * yycount + 1;
+  {
+    int yyi;
+    for (yyi = 0; yyi < yycount; ++yyi)
+      {
+        YYPTRDIFF_T yysize1
+          = yysize + yystrlen (yysymbol_name (yyarg[yyi]));
+        if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+          yysize = yysize1;
+        else
+          return YYENOMEM;
+      }
+  }
+
+  if (*yymsg_alloc < yysize)
+    {
+      *yymsg_alloc = 2 * yysize;
+      if (! (yysize <= *yymsg_alloc
+             && *yymsg_alloc <= YYSTACK_ALLOC_MAXIMUM))
+        *yymsg_alloc = YYSTACK_ALLOC_MAXIMUM;
+      return -1;
+    }
+
+  /* Avoid sprintf, as that infringes on the user's name space.
+     Don't have undefined behavior even if the translation
+     produced a string with the wrong number of "%s"s.  */
+  {
+    char *yyp = *yymsg;
+    int yyi = 0;
+    while ((*yyp = *yyformat) != '\0')
+      if (*yyp == '%' && yyformat[1] == 's' && yyi < yycount)
+        {
+          yyp = yystpcpy (yyp, yysymbol_name (yyarg[yyi++]));
+          yyformat += 2;
+        }
+      else
+        {
+          ++yyp;
+          ++yyformat;
+        }
+  }
+  return 0;
+}
 
 
 /*-----------------------------------------------.
@@ -1031,19 +1268,6 @@ yydestruct (const char *yymsg,
 }
 
 
-/* Lookahead token kind.  */
-int yychar;
-
-/* The semantic value of the lookahead symbol.  */
-YYSTYPE yylval;
-/* Location data for the lookahead symbol.  */
-YYLTYPE yylloc
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
-  = { 1, 1, 1, 1 }
-# endif
-;
-/* Number of syntax errors so far.  */
-int yynerrs;
 
 
 
@@ -1055,6 +1279,27 @@ int yynerrs;
 int
 yyparse (void)
 {
+/* Lookahead token kind.  */
+int yychar;
+
+
+/* The semantic value of the lookahead symbol.  */
+/* Default value used for initialization, for pacifying older GCCs
+   or non-GCC compilers.  */
+YY_INITIAL_VALUE (static YYSTYPE yyval_default;)
+YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
+
+/* Location data for the lookahead symbol.  */
+static YYLTYPE yyloc_default
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+  = { 1, 1, 1, 1 }
+# endif
+;
+YYLTYPE yylloc = yyloc_default;
+
+    /* Number of syntax errors so far.  */
+    int yynerrs = 0;
+
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus = 0;
@@ -1093,7 +1338,10 @@ yyparse (void)
   /* The locations where the error started and ended.  */
   YYLTYPE yyerror_range[3];
 
-
+  /* Buffer for error messages, and its allocated size.  */
+  char yymsgbuf[128];
+  char *yymsg = yymsgbuf;
+  YYPTRDIFF_T yymsg_alloc = sizeof yymsgbuf;
 
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
@@ -1222,7 +1470,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex ();
+      yychar = yylex (&yylval, &yylloc);
     }
 
   if (yychar <= YYEOF)
@@ -1314,331 +1562,377 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: exp  */
-#line 60 "tiger.grm"
+#line 69 "tiger.grm"
              { (yyval.exp) = (yyvsp[0].exp); }
-#line 1320 "tiger.tab.c"
+#line 1568 "tiger.tab.c"
     break;
 
   case 3: /* exp: var_exp  */
-#line 62 "tiger.grm"
+#line 71 "tiger.grm"
              { (yyval.exp) = make_A_VarExp((yylsp[0]), (yyvsp[0].var)); }
-#line 1326 "tiger.tab.c"
+#line 1574 "tiger.tab.c"
     break;
 
   case 4: /* exp: int_exp  */
-#line 63 "tiger.grm"
-              { (yyval.exp) = make_A_IntExp((yylsp[0]), (yyvsp[0].exp)); }
-#line 1332 "tiger.tab.c"
+#line 72 "tiger.grm"
+              { (yyval.exp) = (yyvsp[0].exp); }
+#line 1580 "tiger.tab.c"
     break;
 
   case 5: /* exp: call_exp  */
-#line 64 "tiger.grm"
+#line 73 "tiger.grm"
                { (yyval.exp) = (yyvsp[0].exp); }
-#line 1338 "tiger.tab.c"
+#line 1586 "tiger.tab.c"
     break;
 
   case 6: /* exp: exp PLUS exp  */
-#line 65 "tiger.grm"
+#line 74 "tiger.grm"
                      { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_PLUS_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1344 "tiger.tab.c"
+#line 1592 "tiger.tab.c"
     break;
 
   case 7: /* exp: exp MINUS exp  */
-#line 66 "tiger.grm"
+#line 75 "tiger.grm"
                      { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_MINUS_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1350 "tiger.tab.c"
+#line 1598 "tiger.tab.c"
     break;
 
   case 8: /* exp: exp TIMES exp  */
-#line 67 "tiger.grm"
+#line 76 "tiger.grm"
                      { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_TIMES_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1356 "tiger.tab.c"
+#line 1604 "tiger.tab.c"
     break;
 
   case 9: /* exp: exp DIVIDE exp  */
-#line 68 "tiger.grm"
+#line 77 "tiger.grm"
                      { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_DIVIDE_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1362 "tiger.tab.c"
+#line 1610 "tiger.tab.c"
     break;
 
   case 10: /* exp: record_exp  */
-#line 69 "tiger.grm"
+#line 78 "tiger.grm"
                  { (yyval.exp) = (yyvsp[0].exp); }
-#line 1368 "tiger.tab.c"
+#line 1616 "tiger.tab.c"
     break;
 
   case 11: /* exp: seq_exp  */
-#line 70 "tiger.grm"
+#line 79 "tiger.grm"
               { (yyval.exp) = (yyvsp[0].exp); }
-#line 1374 "tiger.tab.c"
+#line 1622 "tiger.tab.c"
     break;
 
   case 12: /* exp: assign_exp  */
-#line 71 "tiger.grm"
+#line 80 "tiger.grm"
                  { (yyval.exp) = (yyvsp[0].exp); }
-#line 1380 "tiger.tab.c"
+#line 1628 "tiger.tab.c"
     break;
 
   case 13: /* exp: if_exp  */
-#line 72 "tiger.grm"
+#line 81 "tiger.grm"
              { (yyval.exp) = (yyvsp[0].exp); }
-#line 1386 "tiger.tab.c"
+#line 1634 "tiger.tab.c"
     break;
 
   case 14: /* exp: while_exp  */
-#line 73 "tiger.grm"
+#line 82 "tiger.grm"
                 { (yyval.exp) = (yyvsp[0].exp); }
-#line 1392 "tiger.tab.c"
+#line 1640 "tiger.tab.c"
     break;
 
   case 15: /* exp: for_exp  */
-#line 74 "tiger.grm"
+#line 83 "tiger.grm"
               { (yyval.exp) = (yyvsp[0].exp); }
-#line 1398 "tiger.tab.c"
+#line 1646 "tiger.tab.c"
     break;
 
   case 16: /* exp: break_exp  */
-#line 75 "tiger.grm"
+#line 84 "tiger.grm"
                 { (yyval.exp) = (yyvsp[0].exp); }
-#line 1404 "tiger.tab.c"
+#line 1652 "tiger.tab.c"
     break;
 
   case 17: /* exp: let_exp  */
-#line 76 "tiger.grm"
+#line 85 "tiger.grm"
               { (yyval.exp) = (yyvsp[0].exp); }
-#line 1410 "tiger.tab.c"
+#line 1658 "tiger.tab.c"
     break;
 
   case 18: /* var_exp: var  */
-#line 78 "tiger.grm"
-             { (yyval.var) = make_A_VarExp((yylsp[0]), (yyvsp[0].var)); }
-#line 1416 "tiger.tab.c"
+#line 87 "tiger.grm"
+             { (yyval.var) = (yyvsp[0].var); }
+#line 1664 "tiger.tab.c"
     break;
 
   case 19: /* var: simple_var  */
-#line 80 "tiger.grm"
+#line 89 "tiger.grm"
                 { (yyval.var) = (yyvsp[0].var); }
-#line 1422 "tiger.tab.c"
+#line 1670 "tiger.tab.c"
     break;
 
   case 20: /* simple_var: ID  */
-#line 82 "tiger.grm"
+#line 91 "tiger.grm"
                { (yyval.var) = make_A_SimpleVar((yylsp[0]), make_S_Symbol((yyvsp[0].sval))); }
-#line 1428 "tiger.tab.c"
+#line 1676 "tiger.tab.c"
     break;
 
   case 21: /* int_exp: INT  */
-#line 84 "tiger.grm"
+#line 93 "tiger.grm"
              { (yyval.exp) = make_A_IntExp((yylsp[0]), (yyvsp[0].ival)); }
-#line 1434 "tiger.tab.c"
+#line 1682 "tiger.tab.c"
     break;
 
   case 22: /* call_exp: ID LPAREN args RPAREN  */
-#line 86 "tiger.grm"
+#line 95 "tiger.grm"
                                 { (yyval.exp) = make_A_CallExp((yylsp[-3]), make_S_Symbol((yyvsp[-3].sval)), NULL); }
-#line 1440 "tiger.tab.c"
+#line 1688 "tiger.tab.c"
     break;
 
   case 23: /* args: %empty  */
-#line 88 "tiger.grm"
+#line 97 "tiger.grm"
                   { (yyval.explist) = NULL; }
-#line 1446 "tiger.tab.c"
+#line 1694 "tiger.tab.c"
     break;
 
   case 24: /* args: exp_list  */
-#line 89 "tiger.grm"
+#line 98 "tiger.grm"
                { (yyval.explist) = (yyvsp[0].explist); }
-#line 1452 "tiger.tab.c"
+#line 1700 "tiger.tab.c"
     break;
 
   case 25: /* exp_list: exp  */
-#line 92 "tiger.grm"
+#line 101 "tiger.grm"
               { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), NULL); }
-#line 1458 "tiger.tab.c"
+#line 1706 "tiger.tab.c"
     break;
 
   case 26: /* exp_list: exp_list COMMA exp  */
-#line 93 "tiger.grm"
+#line 102 "tiger.grm"
                          { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), (yyvsp[-2].explist)); }
-#line 1464 "tiger.tab.c"
+#line 1712 "tiger.tab.c"
     break;
 
-  case 27: /* record_exp: ID LBRACE field_list RBRACE  */
-#line 96 "tiger.grm"
-                                        { (yyval.exp) = make_A_RecordExp((yylsp[-3]), make_S_Symbol((yyvsp[-3].sval)), (yyvsp[-1].fieldlist)); }
-#line 1470 "tiger.tab.c"
+  case 27: /* exp_seq: exp  */
+#line 105 "tiger.grm"
+             { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), NULL); }
+#line 1718 "tiger.tab.c"
     break;
 
-  case 28: /* field_list: %empty  */
-#line 99 "tiger.grm"
-                        { (yyval.fieldlist) = NULL; }
-#line 1476 "tiger.tab.c"
+  case 28: /* exp_seq: exp_seq SEMICOLON exp  */
+#line 106 "tiger.grm"
+                            { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), (yyvsp[-2].explist)); }
+#line 1724 "tiger.tab.c"
     break;
 
-  case 29: /* field_list: field_list_nonempty  */
-#line 100 "tiger.grm"
-                          { (yyval.fieldlist) = (yyvsp[0].fieldlist); }
-#line 1482 "tiger.tab.c"
-    break;
-
-  case 30: /* field_list_nonempty: field  */
-#line 103 "tiger.grm"
-                           { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), NULL); }
-#line 1488 "tiger.tab.c"
-    break;
-
-  case 31: /* field_list_nonempty: field_list_nonempty COMMA field  */
-#line 104 "tiger.grm"
-                                      { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), (yyvsp[-2].fieldlist)); }
-#line 1494 "tiger.tab.c"
-    break;
-
-  case 32: /* field: ID EQ exp  */
-#line 107 "tiger.grm"
-                 { (yyval.field) = make_A_Field((yylsp[-2]), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
-#line 1500 "tiger.tab.c"
-    break;
-
-  case 33: /* seq_exp: LPAREN exp_list RPAREN  */
+  case 29: /* record_exp: ID LBRACE efield_list RBRACE  */
 #line 110 "tiger.grm"
-                                { (yyval.exp) = make_A_SeqExp((yylsp[-2]), (yyvsp[-1].explist)); }
-#line 1506 "tiger.tab.c"
+          { (yyval.exp) = make_A_RecordExp((yylsp[-3]), make_S_Symbol((yyvsp[-3].sval)), (yyvsp[-1].efieldlist)); }
+#line 1730 "tiger.tab.c"
     break;
 
-  case 34: /* assign_exp: var ASSIGN exp  */
+  case 30: /* field_list: %empty  */
+#line 112 "tiger.grm"
+                        { (yyval.fieldlist) = NULL; }
+#line 1736 "tiger.tab.c"
+    break;
+
+  case 31: /* field_list: field_list_nonempty  */
 #line 113 "tiger.grm"
-                           { (yyval.exp) = make_A_AssignExp((yylsp[-2]), (yyvsp[-2].var), (yyvsp[0].exp)); }
-#line 1512 "tiger.tab.c"
+                                { (yyval.fieldlist) = (yyvsp[0].fieldlist); }
+#line 1742 "tiger.tab.c"
     break;
 
-  case 35: /* if_exp: IF exp THEN exp  */
+  case 32: /* field_list_nonempty: field  */
 #line 116 "tiger.grm"
-                                              { (yyval.exp) = make_A_IfExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp), NULL); }
-#line 1518 "tiger.tab.c"
+                           { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), NULL); }
+#line 1748 "tiger.tab.c"
     break;
 
-  case 36: /* if_exp: IF exp THEN exp ELSE exp  */
+  case 33: /* field_list_nonempty: field_list_nonempty COMMA field  */
 #line 117 "tiger.grm"
-                               { (yyval.exp) = make_A_IfExp((yylsp[-5]), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1524 "tiger.tab.c"
+                                                     { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), (yyvsp[-2].fieldlist)); }
+#line 1754 "tiger.tab.c"
     break;
 
-  case 37: /* while_exp: WHILE exp DO exp  */
+  case 34: /* field: ID COLON ID  */
 #line 120 "tiger.grm"
-                                                 { (yyval.exp) = make_A_WhileExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1530 "tiger.tab.c"
+                   { (yyval.field) = make_A_Field((yylsp[-2]), make_S_Symbol((yyvsp[-2].sval)), make_S_Symbol((yyvsp[0].sval))); }
+#line 1760 "tiger.tab.c"
     break;
 
-  case 38: /* for_exp: FOR ID ASSIGN exp TO exp DO exp  */
+  case 35: /* efield_list: %empty  */
+#line 122 "tiger.grm"
+                         { (yyval.efieldlist) = NULL; }
+#line 1766 "tiger.tab.c"
+    break;
+
+  case 36: /* efield_list: efield_list_nonempty  */
 #line 123 "tiger.grm"
-                                                              { (yyval.exp) = make_A_ForExp((yylsp[-7]), make_S_Symbol((yyvsp[-6].sval)), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
-#line 1536 "tiger.tab.c"
+                                  { (yyval.efieldlist) = (yyvsp[0].efieldlist); }
+#line 1772 "tiger.tab.c"
     break;
 
-  case 39: /* break_exp: BREAK  */
+  case 37: /* efield_list_nonempty: efield  */
 #line 126 "tiger.grm"
-                 { (yyval.exp) = make_A_BreakExp((yylsp[0])); }
-#line 1542 "tiger.tab.c"
+                             { (yyval.efieldlist) = make_A_EFieldList((yyvsp[0].efield), NULL); }
+#line 1778 "tiger.tab.c"
     break;
 
-  case 40: /* let_exp: LET dec_list IN exp_list END  */
-#line 129 "tiger.grm"
-                                      { (yyval.exp) = make_A_LetExp((yylsp[-4]), (yyvsp[-3].declist), (yyvsp[-1].explist)); }
-#line 1548 "tiger.tab.c"
+  case 38: /* efield_list_nonempty: efield_list_nonempty COMMA efield  */
+#line 127 "tiger.grm"
+                                                        { (yyval.efieldlist) = make_A_EFieldList((yyvsp[0].efield), (yyvsp[-2].efieldlist)); }
+#line 1784 "tiger.tab.c"
     break;
 
-  case 41: /* dec_list: %empty  */
-#line 132 "tiger.grm"
-                      { (yyval.declist) = NULL; }
-#line 1554 "tiger.tab.c"
+  case 39: /* efield: ID EQ exp  */
+#line 130 "tiger.grm"
+                  { (yyval.efield) = make_A_EField(make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
+#line 1790 "tiger.tab.c"
     break;
 
-  case 42: /* dec_list: dec_list_nonempty  */
+  case 40: /* seq_exp: LPAREN exp_seq RPAREN  */
 #line 133 "tiger.grm"
-                        { (yyval.declist) = (yyvsp[0].declist); }
-#line 1560 "tiger.tab.c"
+                               { (yyval.exp) = make_A_SeqExp((yylsp[-2]), (yyvsp[-1].explist)); }
+#line 1796 "tiger.tab.c"
     break;
 
-  case 43: /* dec_list_nonempty: dec  */
+  case 41: /* assign_exp: var ASSIGN exp  */
 #line 136 "tiger.grm"
-                       { (yyval.declist) = make_A_DecList((yyvsp[0].dec), NULL); }
-#line 1566 "tiger.tab.c"
+                           { (yyval.exp) = make_A_AssignExp((yylsp[-2]), (yyvsp[-2].var), (yyvsp[0].exp)); }
+#line 1802 "tiger.tab.c"
     break;
 
-  case 44: /* dec_list_nonempty: dec_list_nonempty dec  */
-#line 137 "tiger.grm"
-                            { (yyval.declist) = make_A_DecList((yyvsp[0].dec), (yyvsp[-1].declist)); }
-#line 1572 "tiger.tab.c"
+  case 42: /* if_exp: IF exp THEN exp  */
+#line 139 "tiger.grm"
+                                              { (yyval.exp) = make_A_IfExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp), NULL); }
+#line 1808 "tiger.tab.c"
     break;
 
-  case 45: /* dec: type_dec  */
+  case 43: /* if_exp: IF exp THEN exp ELSE exp  */
 #line 140 "tiger.grm"
-              { (yyval.dec) = (yyvsp[0].dec); }
-#line 1578 "tiger.tab.c"
+                               { (yyval.exp) = make_A_IfExp((yylsp[-5]), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+#line 1814 "tiger.tab.c"
     break;
 
-  case 46: /* dec: var_dec  */
-#line 141 "tiger.grm"
-              { (yyval.dec) = (yyvsp[0].dec); }
-#line 1584 "tiger.tab.c"
+  case 44: /* while_exp: WHILE exp DO exp  */
+#line 143 "tiger.grm"
+                                                 { (yyval.exp) = make_A_WhileExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+#line 1820 "tiger.tab.c"
     break;
 
-  case 47: /* dec: func_dec  */
-#line 142 "tiger.grm"
-               { (yyval.dec) = (yyvsp[0].dec); }
-#line 1590 "tiger.tab.c"
+  case 45: /* for_exp: FOR ID ASSIGN exp TO exp DO exp  */
+#line 146 "tiger.grm"
+                                                              { (yyval.exp) = make_A_ForExp((yylsp[-7]), make_S_Symbol((yyvsp[-6].sval)), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+#line 1826 "tiger.tab.c"
     break;
 
-  case 48: /* type_dec: TYPE ID EQ ty  */
-#line 145 "tiger.grm"
-                        { (yyval.dec) = make_A_TypeDec(make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].type)); }
-#line 1596 "tiger.tab.c"
-    break;
-
-  case 49: /* ty: ID  */
-#line 148 "tiger.grm"
-       { (yyval.type) = make_A_NameType((yylsp[0]), make_S_Symbol((yyvsp[0].sval))); }
-#line 1602 "tiger.tab.c"
-    break;
-
-  case 50: /* ty: LBRACE field_list RBRACE  */
+  case 46: /* break_exp: BREAK  */
 #line 149 "tiger.grm"
+                 { (yyval.exp) = make_A_BreakExp((yylsp[0])); }
+#line 1832 "tiger.tab.c"
+    break;
+
+  case 47: /* let_exp: LET dec_list IN exp_list END  */
+#line 152 "tiger.grm"
+                                      { (yyval.exp) = make_A_LetExp((yylsp[-4]), (yyvsp[-3].declist), make_A_SeqExp((yylsp[-1]), (yyvsp[-1].explist))); }
+#line 1838 "tiger.tab.c"
+    break;
+
+  case 48: /* dec_list: %empty  */
+#line 155 "tiger.grm"
+                      { (yyval.declist) = NULL; }
+#line 1844 "tiger.tab.c"
+    break;
+
+  case 49: /* dec_list: dec_list_nonempty  */
+#line 156 "tiger.grm"
+                        { (yyval.declist) = (yyvsp[0].declist); }
+#line 1850 "tiger.tab.c"
+    break;
+
+  case 50: /* dec_list_nonempty: dec  */
+#line 159 "tiger.grm"
+                       { (yyval.declist) = make_A_DecList((yyvsp[0].dec), NULL); }
+#line 1856 "tiger.tab.c"
+    break;
+
+  case 51: /* dec_list_nonempty: dec_list_nonempty dec  */
+#line 160 "tiger.grm"
+                            { (yyval.declist) = make_A_DecList((yyvsp[0].dec), (yyvsp[-1].declist)); }
+#line 1862 "tiger.tab.c"
+    break;
+
+  case 52: /* dec: type_dec  */
+#line 163 "tiger.grm"
+              { (yyval.dec) = (yyvsp[0].dec); }
+#line 1868 "tiger.tab.c"
+    break;
+
+  case 53: /* dec: var_dec  */
+#line 164 "tiger.grm"
+              { (yyval.dec) = (yyvsp[0].dec); }
+#line 1874 "tiger.tab.c"
+    break;
+
+  case 54: /* dec: func_dec  */
+#line 165 "tiger.grm"
+               { (yyval.dec) = (yyvsp[0].dec); }
+#line 1880 "tiger.tab.c"
+    break;
+
+  case 55: /* type_dec: TYPE ID EQ ty  */
+#line 168 "tiger.grm"
+                        { (yyval.dec) = make_A_TypeDecGroup((yylsp[-3]), make_A_TypeDecList(make_A_TypeDec(make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].type)), NULL)); }
+#line 1886 "tiger.tab.c"
+    break;
+
+  case 56: /* ty: ID  */
+#line 171 "tiger.grm"
+       { (yyval.type) = make_A_NameType((yylsp[0]), make_S_Symbol((yyvsp[0].sval))); }
+#line 1892 "tiger.tab.c"
+    break;
+
+  case 57: /* ty: LBRACE field_list RBRACE  */
+#line 172 "tiger.grm"
                                { (yyval.type) = make_A_RecordType((yylsp[-2]), (yyvsp[-1].fieldlist)); }
-#line 1608 "tiger.tab.c"
+#line 1898 "tiger.tab.c"
     break;
 
-  case 51: /* ty: ARRAY OF ID  */
-#line 150 "tiger.grm"
+  case 58: /* ty: ARRAY OF ID  */
+#line 173 "tiger.grm"
                   { (yyval.type) = make_A_ArrayType((yylsp[-2]), make_S_Symbol((yyvsp[0].sval))); }
-#line 1614 "tiger.tab.c"
+#line 1904 "tiger.tab.c"
     break;
 
-  case 52: /* var_dec: VAR ID ASSIGN exp  */
-#line 153 "tiger.grm"
+  case 59: /* var_dec: VAR ID ASSIGN exp  */
+#line 176 "tiger.grm"
                            { (yyval.dec) = make_A_VarDec((yylsp[-3]), make_S_Symbol((yyvsp[-2].sval)), NULL, (yyvsp[0].exp)); }
-#line 1620 "tiger.tab.c"
+#line 1910 "tiger.tab.c"
     break;
 
-  case 53: /* var_dec: VAR ID COLON ID ASSIGN exp  */
-#line 154 "tiger.grm"
+  case 60: /* var_dec: VAR ID COLON ID ASSIGN exp  */
+#line 177 "tiger.grm"
                                  { (yyval.dec) = make_A_VarDec((yylsp[-5]), make_S_Symbol((yyvsp[-4].sval)), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
-#line 1626 "tiger.tab.c"
+#line 1916 "tiger.tab.c"
     break;
 
-  case 54: /* func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp  */
-#line 157 "tiger.grm"
-                                                      { (yyval.dec) = make_A_FunDec((yylsp[-6]), make_S_Symbol((yyvsp[-5].sval)), (yyvsp[-3].fieldlist), NULL, (yyvsp[0].exp)); }
-#line 1632 "tiger.tab.c"
+  case 61: /* func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp  */
+#line 180 "tiger.grm"
+                                                      {
+    (yyval.dec) = make_A_FunctionDecGroup((yylsp[-6]), make_A_FunDecList(make_A_FunDec((yylsp[-6]), make_S_Symbol((yyvsp[-5].sval)), (yyvsp[-3].fieldlist), NULL, (yyvsp[0].exp)), NULL));
+}
+#line 1924 "tiger.tab.c"
     break;
 
-  case 55: /* func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp  */
-#line 158 "tiger.grm"
-                                                           { (yyval.dec) = make_A_FunDec((yylsp[-8]), make_S_Symbol((yyvsp[-7].sval)), (yyvsp[-5].fieldlist), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
-#line 1638 "tiger.tab.c"
+  case 62: /* func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp  */
+#line 183 "tiger.grm"
+                                                       {
+    (yyval.dec) = make_A_FunctionDecGroup((yylsp[-8]), make_A_FunDecList(make_A_FunDec((yylsp[-8]), make_S_Symbol((yyvsp[-7].sval)), (yyvsp[-5].fieldlist), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)), NULL));
+}
+#line 1932 "tiger.tab.c"
     break;
 
 
-#line 1642 "tiger.tab.c"
+#line 1936 "tiger.tab.c"
 
       default: break;
     }
@@ -1686,7 +1980,37 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (YY_("syntax error"));
+      {
+        yypcontext_t yyctx
+          = {yyssp, yytoken, &yylloc};
+        char const *yymsgp = YY_("syntax error");
+        int yysyntax_error_status;
+        yysyntax_error_status = yysyntax_error (&yymsg_alloc, &yymsg, &yyctx);
+        if (yysyntax_error_status == 0)
+          yymsgp = yymsg;
+        else if (yysyntax_error_status == -1)
+          {
+            if (yymsg != yymsgbuf)
+              YYSTACK_FREE (yymsg);
+            yymsg = YY_CAST (char *,
+                             YYSTACK_ALLOC (YY_CAST (YYSIZE_T, yymsg_alloc)));
+            if (yymsg)
+              {
+                yysyntax_error_status
+                  = yysyntax_error (&yymsg_alloc, &yymsg, &yyctx);
+                yymsgp = yymsg;
+              }
+            else
+              {
+                yymsg = yymsgbuf;
+                yymsg_alloc = sizeof yymsgbuf;
+                yysyntax_error_status = YYENOMEM;
+              }
+          }
+        yyerror (&yylloc, yymsgp);
+        if (yysyntax_error_status == YYENOMEM)
+          YYNOMEM;
+      }
     }
 
   yyerror_range[1] = yylloc;
@@ -1801,7 +2125,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (&yylloc, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1832,7 +2156,14 @@ yyreturnlab:
   if (yyss != yyssa)
     YYSTACK_FREE (yyss);
 #endif
-
+  if (yymsg != yymsgbuf)
+    YYSTACK_FREE (yymsg);
   return yyresult;
 }
 
+#line 187 "tiger.grm"
+ 
+ void yyerror(YYLTYPE *locp, const char *s) {
+    fprintf(stderr, "Error: %s\n", s);
+    fprintf(stderr, "Location: %d:%d - %d:%d\n", locp->first_line, locp->first_column, locp->last_line, locp->last_column);
+}

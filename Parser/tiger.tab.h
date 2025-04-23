@@ -88,10 +88,11 @@ extern int yydebug;
     RPAREN = 289,                  /* RPAREN  */
     COMMA = 290,                   /* COMMA  */
     COLON = 291,                   /* COLON  */
-    LBRACE = 292,                  /* LBRACE  */
-    RBRACE = 293,                  /* RBRACE  */
-    LOW_PRECEDENCE = 294,          /* LOW_PRECEDENCE  */
-    LOWER_THAN_ELSE = 295          /* LOWER_THAN_ELSE  */
+    SEMICOLON = 292,               /* SEMICOLON  */
+    LBRACE = 293,                  /* LBRACE  */
+    RBRACE = 294,                  /* RBRACE  */
+    LOW_PRECEDENCE = 295,          /* LOW_PRECEDENCE  */
+    LOWER_THAN_ELSE = 296          /* LOWER_THAN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -100,7 +101,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "tiger.grm"
+#line 14 "tiger.grm"
 
     int ival;
     char *sval;
@@ -108,14 +109,16 @@ union YYSTYPE
     A_Var var;
     A_Dec dec;
     A_Type type;
-    A_Field field;
     A_ExpList explist;
     A_DecList declist;
+    A_EField efield;
+    A_EFieldList efieldlist;
+    A_Field field;
     A_FieldList fieldlist;
     A_FunDec fundec;
     A_FunDecList fundeclist;
 
-#line 119 "tiger.tab.h"
+#line 122 "tiger.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -127,8 +130,7 @@ typedef union YYSTYPE YYSTYPE;
 typedef E_Pos YYLTYPE;
 
 
-extern YYSTYPE yylval;
-extern YYLTYPE yylloc;
+
 
 int yyparse (void);
 

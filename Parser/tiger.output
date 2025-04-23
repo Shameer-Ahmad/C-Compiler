@@ -46,183 +46,207 @@ Grammar
    24 exp_list: exp
    25         | exp_list COMMA exp
 
-   26 record_exp: ID LBRACE field_list RBRACE
+   26 exp_seq: exp
+   27        | exp_seq SEMICOLON exp
 
-   27 field_list: ε
-   28           | field_list_nonempty
+   28 record_exp: ID LBRACE efield_list RBRACE
 
-   29 field_list_nonempty: field
-   30                    | field_list_nonempty COMMA field
+   29 field_list: ε
+   30           | field_list_nonempty
 
-   31 field: ID EQ exp
+   31 field_list_nonempty: field
+   32                    | field_list_nonempty COMMA field
 
-   32 seq_exp: LPAREN exp_list RPAREN
+   33 field: ID COLON ID
 
-   33 assign_exp: var ASSIGN exp
+   34 efield_list: ε
+   35            | efield_list_nonempty
 
-   34 if_exp: IF exp THEN exp
-   35       | IF exp THEN exp ELSE exp
+   36 efield_list_nonempty: efield
+   37                     | efield_list_nonempty COMMA efield
 
-   36 while_exp: WHILE exp DO exp
+   38 efield: ID EQ exp
 
-   37 for_exp: FOR ID ASSIGN exp TO exp DO exp
+   39 seq_exp: LPAREN exp_seq RPAREN
 
-   38 break_exp: BREAK
+   40 assign_exp: var ASSIGN exp
 
-   39 let_exp: LET dec_list IN exp_list END
+   41 if_exp: IF exp THEN exp
+   42       | IF exp THEN exp ELSE exp
 
-   40 dec_list: ε
-   41         | dec_list_nonempty
+   43 while_exp: WHILE exp DO exp
 
-   42 dec_list_nonempty: dec
-   43                  | dec_list_nonempty dec
+   44 for_exp: FOR ID ASSIGN exp TO exp DO exp
 
-   44 dec: type_dec
-   45    | var_dec
-   46    | func_dec
+   45 break_exp: BREAK
 
-   47 type_dec: TYPE ID EQ ty
+   46 let_exp: LET dec_list IN exp_list END
 
-   48 ty: ID
-   49   | LBRACE field_list RBRACE
-   50   | ARRAY OF ID
+   47 dec_list: ε
+   48         | dec_list_nonempty
 
-   51 var_dec: VAR ID ASSIGN exp
-   52        | VAR ID COLON ID ASSIGN exp
+   49 dec_list_nonempty: dec
+   50                  | dec_list_nonempty dec
 
-   53 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp
-   54         | FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp
+   51 dec: type_dec
+   52    | var_dec
+   53    | func_dec
+
+   54 type_dec: TYPE ID EQ ty
+
+   55 ty: ID
+   56   | LBRACE field_list RBRACE
+   57   | ARRAY OF ID
+
+   58 var_dec: VAR ID ASSIGN exp
+   59        | VAR ID COLON ID ASSIGN exp
+
+   60 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp
+   61         | FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
     error (256)
-    ID <sval> (258) 19 21 26 31 37 47 48 50 51 52 53 54
+    ID <sval> (258) 19 21 28 33 38 44 54 55 57 58 59 60 61
     INT <ival> (259) 20
     PLUS (260) 5
     MINUS (261) 6
     TIMES (262) 7
     DIVIDE (263) 8
-    EQ (264) 31 47 53 54
+    EQ (264) 38 54 60 61
     NEQ (265)
     LT (266)
     LE (267)
     GT (268)
     GE (269)
-    ASSIGN (270) 33 37 51 52
-    ARRAY (271) 50
-    IF (272) 34 35
-    THEN (273) 34 35
-    ELSE (274) 35
-    WHILE (275) 36
-    FOR (276) 37
-    TO (277) 37
-    DO (278) 36 37
-    LET (279) 39
-    IN (280) 39
-    END (281) 39
-    OF (282) 50
-    BREAK (283) 38
+    ASSIGN (270) 40 44 58 59
+    ARRAY (271) 57
+    IF (272) 41 42
+    THEN (273) 41 42
+    ELSE (274) 42
+    WHILE (275) 43
+    FOR (276) 44
+    TO (277) 44
+    DO (278) 43 44
+    LET (279) 46
+    IN (280) 46
+    END (281) 46
+    OF (282) 57
+    BREAK (283) 45
     NIL (284)
-    FUNCTION (285) 53 54
-    VAR (286) 51 52
-    TYPE (287) 47
-    LPAREN (288) 21 32 53 54
-    RPAREN (289) 21 32 53 54
-    COMMA (290) 25 30
-    COLON (291) 52 54
-    LBRACE (292) 26 49
-    RBRACE (293) 26 49
-    LOW_PRECEDENCE (294)
-    LOWER_THAN_ELSE (295)
+    FUNCTION (285) 60 61
+    VAR (286) 58 59
+    TYPE (287) 54
+    LPAREN (288) 21 39 60 61
+    RPAREN (289) 21 39 60 61
+    COMMA (290) 25 32 37
+    COLON (291) 33 59 61
+    SEMICOLON (292) 27
+    LBRACE (293) 28 56
+    RBRACE (294) 28 56
+    LOW_PRECEDENCE (295)
+    LOWER_THAN_ELSE (296)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (41)
+    $accept (42)
         on left: 0
-    program <exp> (42)
+    program <exp> (43)
         on left: 1
         on right: 0
-    exp <exp> (43)
+    exp <exp> (44)
         on left: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
-        on right: 1 5 6 7 8 24 25 31 33 34 35 36 37 51 52 53 54
-    var_exp <var> (44)
+        on right: 1 5 6 7 8 24 25 26 27 38 40 41 42 43 44 58 59 60 61
+    var_exp <var> (45)
         on left: 17
         on right: 2
-    var <var> (45)
+    var <var> (46)
         on left: 18
-        on right: 17 33
-    simple_var <var> (46)
+        on right: 17 40
+    simple_var <var> (47)
         on left: 19
         on right: 18
-    int_exp <exp> (47)
+    int_exp <exp> (48)
         on left: 20
         on right: 3
-    call_exp <exp> (48)
+    call_exp <exp> (49)
         on left: 21
         on right: 4
-    args <explist> (49)
+    args <explist> (50)
         on left: 22 23
         on right: 21
-    exp_list <explist> (50)
+    exp_list <explist> (51)
         on left: 24 25
-        on right: 23 25 32 39
-    record_exp <exp> (51)
-        on left: 26
+        on right: 23 25 46
+    exp_seq <explist> (52)
+        on left: 26 27
+        on right: 27 39
+    record_exp <exp> (53)
+        on left: 28
         on right: 9
-    field_list <fieldlist> (52)
-        on left: 27 28
-        on right: 26 49 53 54
-    field_list_nonempty <fieldlist> (53)
+    field_list <fieldlist> (54)
         on left: 29 30
-        on right: 28 30
-    field <field> (54)
-        on left: 31
-        on right: 29 30
-    seq_exp <exp> (55)
-        on left: 32
-        on right: 10
-    assign_exp <exp> (56)
+        on right: 56 60 61
+    field_list_nonempty <fieldlist> (55)
+        on left: 31 32
+        on right: 30 32
+    field <field> (56)
         on left: 33
-        on right: 11
-    if_exp <exp> (57)
+        on right: 31 32
+    efield_list <efieldlist> (57)
         on left: 34 35
-        on right: 12
-    while_exp <exp> (58)
-        on left: 36
-        on right: 13
-    for_exp <exp> (59)
-        on left: 37
-        on right: 14
-    break_exp <exp> (60)
+        on right: 28
+    efield_list_nonempty <efieldlist> (58)
+        on left: 36 37
+        on right: 35 37
+    efield <efield> (59)
         on left: 38
-        on right: 15
-    let_exp <exp> (61)
+        on right: 36 37
+    seq_exp <exp> (60)
         on left: 39
+        on right: 10
+    assign_exp <exp> (61)
+        on left: 40
+        on right: 11
+    if_exp <exp> (62)
+        on left: 41 42
+        on right: 12
+    while_exp <exp> (63)
+        on left: 43
+        on right: 13
+    for_exp <exp> (64)
+        on left: 44
+        on right: 14
+    break_exp <exp> (65)
+        on left: 45
+        on right: 15
+    let_exp <exp> (66)
+        on left: 46
         on right: 16
-    dec_list <declist> (62)
-        on left: 40 41
-        on right: 39
-    dec_list_nonempty <declist> (63)
-        on left: 42 43
-        on right: 41 43
-    dec <dec> (64)
-        on left: 44 45 46
-        on right: 42 43
-    type_dec <dec> (65)
-        on left: 47
-        on right: 44
-    ty <type> (66)
-        on left: 48 49 50
-        on right: 47
-    var_dec <dec> (67)
-        on left: 51 52
-        on right: 45
-    func_dec <dec> (68)
-        on left: 53 54
+    dec_list <declist> (67)
+        on left: 47 48
         on right: 46
+    dec_list_nonempty <declist> (68)
+        on left: 49 50
+        on right: 48 50
+    dec <dec> (69)
+        on left: 51 52 53
+        on right: 49 50
+    type_dec <dec> (70)
+        on left: 54
+        on right: 51
+    ty <type> (71)
+        on left: 55 56 57
+        on right: 54
+    var_dec <dec> (72)
+        on left: 58 59
+        on right: 52
+    func_dec <dec> (73)
+        on left: 60 61
+        on right: 53
 
 
 State 0
@@ -259,7 +283,7 @@ State 1
 
    19 simple_var: ID •
    21 call_exp: ID • LPAREN args RPAREN
-   26 record_exp: ID • LBRACE field_list RBRACE
+   28 record_exp: ID • LBRACE efield_list RBRACE
 
     LPAREN  shift, and go to state 24
     LBRACE  shift, and go to state 25
@@ -276,8 +300,8 @@ State 2
 
 State 3
 
-   34 if_exp: IF • exp THEN exp
-   35       | IF • exp THEN exp ELSE exp
+   41 if_exp: IF • exp THEN exp
+   42       | IF • exp THEN exp ELSE exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -306,7 +330,7 @@ State 3
 
 State 4
 
-   36 while_exp: WHILE • exp DO exp
+   43 while_exp: WHILE • exp DO exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -335,20 +359,20 @@ State 4
 
 State 5
 
-   37 for_exp: FOR • ID ASSIGN exp TO exp DO exp
+   44 for_exp: FOR • ID ASSIGN exp TO exp DO exp
 
     ID  shift, and go to state 28
 
 
 State 6
 
-   39 let_exp: LET • dec_list IN exp_list END
+   46 let_exp: LET • dec_list IN exp_list END
 
     FUNCTION  shift, and go to state 29
     VAR       shift, and go to state 30
     TYPE      shift, and go to state 31
 
-    $default  reduce using rule 40 (dec_list)
+    $default  reduce using rule 47 (dec_list)
 
     dec_list           go to state 32
     dec_list_nonempty  go to state 33
@@ -360,14 +384,14 @@ State 6
 
 State 7
 
-   38 break_exp: BREAK •
+   45 break_exp: BREAK •
 
-    $default  reduce using rule 38 (break_exp)
+    $default  reduce using rule 45 (break_exp)
 
 
 State 8
 
-   32 seq_exp: LPAREN • exp_list RPAREN
+   39 seq_exp: LPAREN • exp_seq RPAREN
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -384,7 +408,7 @@ State 8
     simple_var  go to state 13
     int_exp     go to state 14
     call_exp    go to state 15
-    exp_list    go to state 39
+    exp_seq     go to state 39
     record_exp  go to state 16
     seq_exp     go to state 17
     assign_exp  go to state 18
@@ -428,7 +452,7 @@ State 11
 State 12
 
    17 var_exp: var •
-   33 assign_exp: var • ASSIGN exp
+   40 assign_exp: var • ASSIGN exp
 
     ASSIGN  shift, and go to state 45
 
@@ -527,14 +551,14 @@ State 24
 
     $default  reduce using rule 22 (args)
 
-    exp         go to state 38
+    exp         go to state 46
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
     int_exp     go to state 14
     call_exp    go to state 15
-    args        go to state 46
-    exp_list    go to state 47
+    args        go to state 47
+    exp_list    go to state 48
     record_exp  go to state 16
     seq_exp     go to state 17
     assign_exp  go to state 18
@@ -547,15 +571,15 @@ State 24
 
 State 25
 
-   26 record_exp: ID LBRACE • field_list RBRACE
+   28 record_exp: ID LBRACE • efield_list RBRACE
 
-    ID  shift, and go to state 48
+    ID  shift, and go to state 49
 
-    $default  reduce using rule 27 (field_list)
+    $default  reduce using rule 34 (efield_list)
 
-    field_list           go to state 49
-    field_list_nonempty  go to state 50
-    field                go to state 51
+    efield_list           go to state 50
+    efield_list_nonempty  go to state 51
+    efield                go to state 52
 
 
 State 26
@@ -564,14 +588,14 @@ State 26
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   34 if_exp: IF exp • THEN exp
-   35       | IF exp • THEN exp ELSE exp
+   41 if_exp: IF exp • THEN exp
+   42       | IF exp • THEN exp ELSE exp
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
-    THEN    shift, and go to state 52
+    THEN    shift, and go to state 53
 
 
 State 27
@@ -580,64 +604,64 @@ State 27
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   36 while_exp: WHILE exp • DO exp
+   43 while_exp: WHILE exp • DO exp
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
-    DO      shift, and go to state 53
+    DO      shift, and go to state 54
 
 
 State 28
 
-   37 for_exp: FOR ID • ASSIGN exp TO exp DO exp
+   44 for_exp: FOR ID • ASSIGN exp TO exp DO exp
 
-    ASSIGN  shift, and go to state 54
+    ASSIGN  shift, and go to state 55
 
 
 State 29
 
-   53 func_dec: FUNCTION • ID LPAREN field_list RPAREN EQ exp
-   54         | FUNCTION • ID LPAREN field_list RPAREN COLON ID EQ exp
-
-    ID  shift, and go to state 55
-
-
-State 30
-
-   51 var_dec: VAR • ID ASSIGN exp
-   52        | VAR • ID COLON ID ASSIGN exp
+   60 func_dec: FUNCTION • ID LPAREN field_list RPAREN EQ exp
+   61         | FUNCTION • ID LPAREN field_list RPAREN COLON ID EQ exp
 
     ID  shift, and go to state 56
 
 
-State 31
+State 30
 
-   47 type_dec: TYPE • ID EQ ty
+   58 var_dec: VAR • ID ASSIGN exp
+   59        | VAR • ID COLON ID ASSIGN exp
 
     ID  shift, and go to state 57
 
 
+State 31
+
+   54 type_dec: TYPE • ID EQ ty
+
+    ID  shift, and go to state 58
+
+
 State 32
 
-   39 let_exp: LET dec_list • IN exp_list END
+   46 let_exp: LET dec_list • IN exp_list END
 
-    IN  shift, and go to state 58
+    IN  shift, and go to state 59
 
 
 State 33
 
-   41 dec_list: dec_list_nonempty •
-   43 dec_list_nonempty: dec_list_nonempty • dec
+   48 dec_list: dec_list_nonempty •
+   50 dec_list_nonempty: dec_list_nonempty • dec
 
     FUNCTION  shift, and go to state 29
     VAR       shift, and go to state 30
     TYPE      shift, and go to state 31
 
-    $default  reduce using rule 41 (dec_list)
+    $default  reduce using rule 48 (dec_list)
 
-    dec       go to state 59
+    dec       go to state 60
     type_dec  go to state 35
     var_dec   go to state 36
     func_dec  go to state 37
@@ -645,30 +669,30 @@ State 33
 
 State 34
 
-   42 dec_list_nonempty: dec •
+   49 dec_list_nonempty: dec •
 
-    $default  reduce using rule 42 (dec_list_nonempty)
+    $default  reduce using rule 49 (dec_list_nonempty)
 
 
 State 35
 
-   44 dec: type_dec •
+   51 dec: type_dec •
 
-    $default  reduce using rule 44 (dec)
+    $default  reduce using rule 51 (dec)
 
 
 State 36
 
-   45 dec: var_dec •
+   52 dec: var_dec •
 
-    $default  reduce using rule 45 (dec)
+    $default  reduce using rule 52 (dec)
 
 
 State 37
 
-   46 dec: func_dec •
+   53 dec: func_dec •
 
-    $default  reduce using rule 46 (dec)
+    $default  reduce using rule 53 (dec)
 
 
 State 38
@@ -677,23 +701,23 @@ State 38
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   24 exp_list: exp •
+   26 exp_seq: exp •
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
 
-    $default  reduce using rule 24 (exp_list)
+    $default  reduce using rule 26 (exp_seq)
 
 
 State 39
 
-   25 exp_list: exp_list • COMMA exp
-   32 seq_exp: LPAREN exp_list • RPAREN
+   27 exp_seq: exp_seq • SEMICOLON exp
+   39 seq_exp: LPAREN exp_seq • RPAREN
 
-    RPAREN  shift, and go to state 60
-    COMMA   shift, and go to state 61
+    RPAREN     shift, and go to state 61
+    SEMICOLON  shift, and go to state 62
 
 
 State 40
@@ -716,7 +740,7 @@ State 41
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 62
+    exp         go to state 63
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -745,7 +769,7 @@ State 42
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 63
+    exp         go to state 64
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -774,7 +798,7 @@ State 43
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 64
+    exp         go to state 65
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -803,7 +827,7 @@ State 44
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 65
+    exp         go to state 66
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -821,7 +845,7 @@ State 44
 
 State 45
 
-   33 assign_exp: var ASSIGN • exp
+   40 assign_exp: var ASSIGN • exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -832,7 +856,7 @@ State 45
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 66
+    exp         go to state 67
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -850,114 +874,72 @@ State 45
 
 State 46
 
-   21 call_exp: ID LPAREN args • RPAREN
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   24 exp_list: exp •
 
-    RPAREN  shift, and go to state 67
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+
+    $default  reduce using rule 24 (exp_list)
 
 
 State 47
 
-   23 args: exp_list •
-   25 exp_list: exp_list • COMMA exp
+   21 call_exp: ID LPAREN args • RPAREN
 
-    COMMA  shift, and go to state 61
-
-    $default  reduce using rule 23 (args)
+    RPAREN  shift, and go to state 68
 
 
 State 48
 
-   31 field: ID • EQ exp
+   23 args: exp_list •
+   25 exp_list: exp_list • COMMA exp
 
-    EQ  shift, and go to state 68
+    COMMA  shift, and go to state 69
+
+    $default  reduce using rule 23 (args)
 
 
 State 49
 
-   26 record_exp: ID LBRACE field_list • RBRACE
+   38 efield: ID • EQ exp
 
-    RBRACE  shift, and go to state 69
+    EQ  shift, and go to state 70
 
 
 State 50
 
-   28 field_list: field_list_nonempty •
-   30 field_list_nonempty: field_list_nonempty • COMMA field
+   28 record_exp: ID LBRACE efield_list • RBRACE
 
-    COMMA  shift, and go to state 70
-
-    $default  reduce using rule 28 (field_list)
+    RBRACE  shift, and go to state 71
 
 
 State 51
 
-   29 field_list_nonempty: field •
+   35 efield_list: efield_list_nonempty •
+   37 efield_list_nonempty: efield_list_nonempty • COMMA efield
 
-    $default  reduce using rule 29 (field_list_nonempty)
+    COMMA  shift, and go to state 72
+
+    $default  reduce using rule 35 (efield_list)
 
 
 State 52
 
-   34 if_exp: IF exp THEN • exp
-   35       | IF exp THEN • exp ELSE exp
+   36 efield_list_nonempty: efield •
 
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 71
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    $default  reduce using rule 36 (efield_list_nonempty)
 
 
 State 53
 
-   36 while_exp: WHILE exp DO • exp
-
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 72
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
-
-
-State 54
-
-   37 for_exp: FOR ID ASSIGN • exp TO exp DO exp
+   41 if_exp: IF exp THEN • exp
+   42       | IF exp THEN • exp ELSE exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -984,77 +966,91 @@ State 54
     let_exp     go to state 23
 
 
+State 54
+
+   43 while_exp: WHILE exp DO • exp
+
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 74
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
+
+
 State 55
 
-   53 func_dec: FUNCTION ID • LPAREN field_list RPAREN EQ exp
-   54         | FUNCTION ID • LPAREN field_list RPAREN COLON ID EQ exp
+   44 for_exp: FOR ID ASSIGN • exp TO exp DO exp
 
-    LPAREN  shift, and go to state 74
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 75
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
 
 
 State 56
 
-   51 var_dec: VAR ID • ASSIGN exp
-   52        | VAR ID • COLON ID ASSIGN exp
+   60 func_dec: FUNCTION ID • LPAREN field_list RPAREN EQ exp
+   61         | FUNCTION ID • LPAREN field_list RPAREN COLON ID EQ exp
 
-    ASSIGN  shift, and go to state 75
-    COLON   shift, and go to state 76
+    LPAREN  shift, and go to state 76
 
 
 State 57
 
-   47 type_dec: TYPE ID • EQ ty
+   58 var_dec: VAR ID • ASSIGN exp
+   59        | VAR ID • COLON ID ASSIGN exp
 
-    EQ  shift, and go to state 77
+    ASSIGN  shift, and go to state 77
+    COLON   shift, and go to state 78
 
 
 State 58
 
-   39 let_exp: LET dec_list IN • exp_list END
+   54 type_dec: TYPE ID • EQ ty
 
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 38
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    exp_list    go to state 78
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    EQ  shift, and go to state 79
 
 
 State 59
 
-   43 dec_list_nonempty: dec_list_nonempty dec •
-
-    $default  reduce using rule 43 (dec_list_nonempty)
-
-
-State 60
-
-   32 seq_exp: LPAREN exp_list RPAREN •
-
-    $default  reduce using rule 32 (seq_exp)
-
-
-State 61
-
-   25 exp_list: exp_list COMMA • exp
+   46 let_exp: LET dec_list IN • exp_list END
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -1065,7 +1061,51 @@ State 61
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 79
+    exp         go to state 46
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    exp_list    go to state 80
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
+
+
+State 60
+
+   50 dec_list_nonempty: dec_list_nonempty dec •
+
+    $default  reduce using rule 50 (dec_list_nonempty)
+
+
+State 61
+
+   39 seq_exp: LPAREN exp_seq RPAREN •
+
+    $default  reduce using rule 39 (seq_exp)
+
+
+State 62
+
+   27 exp_seq: exp_seq SEMICOLON • exp
+
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 81
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -1081,7 +1121,7 @@ State 61
     let_exp     go to state 23
 
 
-State 62
+State 63
 
     5 exp: exp • PLUS exp
     5    | exp PLUS exp •
@@ -1095,7 +1135,7 @@ State 62
     $default  reduce using rule 5 (exp)
 
 
-State 63
+State 64
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
@@ -1109,7 +1149,7 @@ State 63
     $default  reduce using rule 6 (exp)
 
 
-State 64
+State 65
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
@@ -1120,7 +1160,7 @@ State 64
     $default  reduce using rule 7 (exp)
 
 
-State 65
+State 66
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
@@ -1131,27 +1171,27 @@ State 65
     $default  reduce using rule 8 (exp)
 
 
-State 66
+State 67
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   33 assign_exp: var ASSIGN exp •
+   40 assign_exp: var ASSIGN exp •
 
-    $default  reduce using rule 33 (assign_exp)
+    $default  reduce using rule 40 (assign_exp)
 
 
-State 67
+State 68
 
    21 call_exp: ID LPAREN args RPAREN •
 
     $default  reduce using rule 21 (call_exp)
 
 
-State 68
+State 69
 
-   31 field: ID EQ • exp
+   25 exp_list: exp_list COMMA • exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -1162,7 +1202,7 @@ State 68
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 80
+    exp         go to state 82
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -1178,45 +1218,49 @@ State 68
     let_exp     go to state 23
 
 
-State 69
-
-   26 record_exp: ID LBRACE field_list RBRACE •
-
-    $default  reduce using rule 26 (record_exp)
-
-
 State 70
 
-   30 field_list_nonempty: field_list_nonempty COMMA • field
+   38 efield: ID EQ • exp
 
-    ID  shift, and go to state 48
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
 
-    field  go to state 81
+    exp         go to state 83
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
 
 
 State 71
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   34 if_exp: IF exp THEN exp •
-   35       | IF exp THEN exp • ELSE exp
+   28 record_exp: ID LBRACE efield_list RBRACE •
 
-    ELSE  shift, and go to state 82
-
-    $default  reduce using rule 34 (if_exp)
+    $default  reduce using rule 28 (record_exp)
 
 
 State 72
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   36 while_exp: WHILE exp DO exp •
+   37 efield_list_nonempty: efield_list_nonempty COMMA • efield
 
-    $default  reduce using rule 36 (while_exp)
+    ID  shift, and go to state 49
+
+    efield  go to state 84
 
 
 State 73
@@ -1225,32 +1269,57 @@ State 73
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   37 for_exp: FOR ID ASSIGN exp • TO exp DO exp
+   41 if_exp: IF exp THEN exp •
+   42       | IF exp THEN exp • ELSE exp
+
+    ELSE  shift, and go to state 85
+
+    $default  reduce using rule 41 (if_exp)
+
+
+State 74
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   43 while_exp: WHILE exp DO exp •
+
+    $default  reduce using rule 43 (while_exp)
+
+
+State 75
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   44 for_exp: FOR ID ASSIGN exp • TO exp DO exp
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
-    TO      shift, and go to state 83
+    TO      shift, and go to state 86
 
 
-State 74
+State 76
 
-   53 func_dec: FUNCTION ID LPAREN • field_list RPAREN EQ exp
-   54         | FUNCTION ID LPAREN • field_list RPAREN COLON ID EQ exp
+   60 func_dec: FUNCTION ID LPAREN • field_list RPAREN EQ exp
+   61         | FUNCTION ID LPAREN • field_list RPAREN COLON ID EQ exp
 
-    ID  shift, and go to state 48
+    ID  shift, and go to state 87
 
-    $default  reduce using rule 27 (field_list)
+    $default  reduce using rule 29 (field_list)
 
-    field_list           go to state 84
-    field_list_nonempty  go to state 50
-    field                go to state 51
+    field_list           go to state 88
+    field_list_nonempty  go to state 89
+    field                go to state 90
 
 
-State 75
+State 77
 
-   51 var_dec: VAR ID ASSIGN • exp
+   58 var_dec: VAR ID ASSIGN • exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -1261,7 +1330,7 @@ State 75
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 85
+    exp         go to state 91
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -1277,34 +1346,50 @@ State 75
     let_exp     go to state 23
 
 
-State 76
-
-   52 var_dec: VAR ID COLON • ID ASSIGN exp
-
-    ID  shift, and go to state 86
-
-
-State 77
-
-   47 type_dec: TYPE ID EQ • ty
-
-    ID      shift, and go to state 87
-    ARRAY   shift, and go to state 88
-    LBRACE  shift, and go to state 89
-
-    ty  go to state 90
-
-
 State 78
 
-   25 exp_list: exp_list • COMMA exp
-   39 let_exp: LET dec_list IN exp_list • END
+   59 var_dec: VAR ID COLON • ID ASSIGN exp
 
-    END    shift, and go to state 91
-    COMMA  shift, and go to state 61
+    ID  shift, and go to state 92
 
 
 State 79
+
+   54 type_dec: TYPE ID EQ • ty
+
+    ID      shift, and go to state 93
+    ARRAY   shift, and go to state 94
+    LBRACE  shift, and go to state 95
+
+    ty  go to state 96
+
+
+State 80
+
+   25 exp_list: exp_list • COMMA exp
+   46 let_exp: LET dec_list IN exp_list • END
+
+    END    shift, and go to state 97
+    COMMA  shift, and go to state 69
+
+
+State 81
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   27 exp_seq: exp_seq SEMICOLON exp •
+
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+
+    $default  reduce using rule 27 (exp_seq)
+
+
+State 82
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
@@ -1320,369 +1405,237 @@ State 79
     $default  reduce using rule 25 (exp_list)
 
 
-State 80
+State 83
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   31 field: ID EQ exp •
+   38 efield: ID EQ exp •
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
 
-    $default  reduce using rule 31 (field)
-
-
-State 81
-
-   30 field_list_nonempty: field_list_nonempty COMMA field •
-
-    $default  reduce using rule 30 (field_list_nonempty)
-
-
-State 82
-
-   35 if_exp: IF exp THEN exp ELSE • exp
-
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 92
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
-
-
-State 83
-
-   37 for_exp: FOR ID ASSIGN exp TO • exp DO exp
-
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 93
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    $default  reduce using rule 38 (efield)
 
 
 State 84
 
-   53 func_dec: FUNCTION ID LPAREN field_list • RPAREN EQ exp
-   54         | FUNCTION ID LPAREN field_list • RPAREN COLON ID EQ exp
+   37 efield_list_nonempty: efield_list_nonempty COMMA efield •
 
-    RPAREN  shift, and go to state 94
+    $default  reduce using rule 37 (efield_list_nonempty)
 
 
 State 85
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   51 var_dec: VAR ID ASSIGN exp •
+   42 if_exp: IF exp THEN exp ELSE • exp
 
-    PLUS    shift, and go to state 41
-    MINUS   shift, and go to state 42
-    TIMES   shift, and go to state 43
-    DIVIDE  shift, and go to state 44
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
 
-    $default  reduce using rule 51 (var_dec)
+    exp         go to state 98
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
 
 
 State 86
 
-   52 var_dec: VAR ID COLON ID • ASSIGN exp
+   44 for_exp: FOR ID ASSIGN exp TO • exp DO exp
 
-    ASSIGN  shift, and go to state 95
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 99
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
 
 
 State 87
 
-   48 ty: ID •
+   33 field: ID • COLON ID
 
-    $default  reduce using rule 48 (ty)
+    COLON  shift, and go to state 100
 
 
 State 88
 
-   50 ty: ARRAY • OF ID
+   60 func_dec: FUNCTION ID LPAREN field_list • RPAREN EQ exp
+   61         | FUNCTION ID LPAREN field_list • RPAREN COLON ID EQ exp
 
-    OF  shift, and go to state 96
+    RPAREN  shift, and go to state 101
 
 
 State 89
 
-   49 ty: LBRACE • field_list RBRACE
+   30 field_list: field_list_nonempty •
+   32 field_list_nonempty: field_list_nonempty • COMMA field
 
-    ID  shift, and go to state 48
+    COMMA  shift, and go to state 102
 
-    $default  reduce using rule 27 (field_list)
-
-    field_list           go to state 97
-    field_list_nonempty  go to state 50
-    field                go to state 51
+    $default  reduce using rule 30 (field_list)
 
 
 State 90
 
-   47 type_dec: TYPE ID EQ ty •
+   31 field_list_nonempty: field •
 
-    $default  reduce using rule 47 (type_dec)
+    $default  reduce using rule 31 (field_list_nonempty)
 
 
 State 91
 
-   39 let_exp: LET dec_list IN exp_list END •
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   58 var_dec: VAR ID ASSIGN exp •
 
-    $default  reduce using rule 39 (let_exp)
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+
+    $default  reduce using rule 58 (var_dec)
 
 
 State 92
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   35 if_exp: IF exp THEN exp ELSE exp •
+   59 var_dec: VAR ID COLON ID • ASSIGN exp
 
-    $default  reduce using rule 35 (if_exp)
+    ASSIGN  shift, and go to state 103
 
 
 State 93
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   37 for_exp: FOR ID ASSIGN exp TO exp • DO exp
+   55 ty: ID •
 
-    PLUS    shift, and go to state 41
-    MINUS   shift, and go to state 42
-    TIMES   shift, and go to state 43
-    DIVIDE  shift, and go to state 44
-    DO      shift, and go to state 98
+    $default  reduce using rule 55 (ty)
 
 
 State 94
 
-   53 func_dec: FUNCTION ID LPAREN field_list RPAREN • EQ exp
-   54         | FUNCTION ID LPAREN field_list RPAREN • COLON ID EQ exp
+   57 ty: ARRAY • OF ID
 
-    EQ     shift, and go to state 99
-    COLON  shift, and go to state 100
+    OF  shift, and go to state 104
 
 
 State 95
 
-   52 var_dec: VAR ID COLON ID ASSIGN • exp
+   56 ty: LBRACE • field_list RBRACE
 
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
+    ID  shift, and go to state 87
 
-    exp         go to state 101
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    $default  reduce using rule 29 (field_list)
+
+    field_list           go to state 105
+    field_list_nonempty  go to state 89
+    field                go to state 90
 
 
 State 96
 
-   50 ty: ARRAY OF • ID
+   54 type_dec: TYPE ID EQ ty •
 
-    ID  shift, and go to state 102
+    $default  reduce using rule 54 (type_dec)
 
 
 State 97
 
-   49 ty: LBRACE field_list • RBRACE
+   46 let_exp: LET dec_list IN exp_list END •
 
-    RBRACE  shift, and go to state 103
+    $default  reduce using rule 46 (let_exp)
 
 
 State 98
 
-   37 for_exp: FOR ID ASSIGN exp TO exp DO • exp
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   42 if_exp: IF exp THEN exp ELSE exp •
 
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 104
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    $default  reduce using rule 42 (if_exp)
 
 
 State 99
 
-   53 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ • exp
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   44 for_exp: FOR ID ASSIGN exp TO exp • DO exp
 
-    ID      shift, and go to state 1
-    INT     shift, and go to state 2
-    IF      shift, and go to state 3
-    WHILE   shift, and go to state 4
-    FOR     shift, and go to state 5
-    LET     shift, and go to state 6
-    BREAK   shift, and go to state 7
-    LPAREN  shift, and go to state 8
-
-    exp         go to state 105
-    var_exp     go to state 11
-    var         go to state 12
-    simple_var  go to state 13
-    int_exp     go to state 14
-    call_exp    go to state 15
-    record_exp  go to state 16
-    seq_exp     go to state 17
-    assign_exp  go to state 18
-    if_exp      go to state 19
-    while_exp   go to state 20
-    for_exp     go to state 21
-    break_exp   go to state 22
-    let_exp     go to state 23
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+    DO      shift, and go to state 106
 
 
 State 100
 
-   54 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON • ID EQ exp
+   33 field: ID COLON • ID
 
-    ID  shift, and go to state 106
+    ID  shift, and go to state 107
 
 
 State 101
 
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   52 var_dec: VAR ID COLON ID ASSIGN exp •
+   60 func_dec: FUNCTION ID LPAREN field_list RPAREN • EQ exp
+   61         | FUNCTION ID LPAREN field_list RPAREN • COLON ID EQ exp
 
-    PLUS    shift, and go to state 41
-    MINUS   shift, and go to state 42
-    TIMES   shift, and go to state 43
-    DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 52 (var_dec)
+    EQ     shift, and go to state 108
+    COLON  shift, and go to state 109
 
 
 State 102
 
-   50 ty: ARRAY OF ID •
+   32 field_list_nonempty: field_list_nonempty COMMA • field
 
-    $default  reduce using rule 50 (ty)
+    ID  shift, and go to state 87
+
+    field  go to state 110
 
 
 State 103
 
-   49 ty: LBRACE field_list RBRACE •
-
-    $default  reduce using rule 49 (ty)
-
-
-State 104
-
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   37 for_exp: FOR ID ASSIGN exp TO exp DO exp •
-
-    $default  reduce using rule 37 (for_exp)
-
-
-State 105
-
-    5 exp: exp • PLUS exp
-    6    | exp • MINUS exp
-    7    | exp • TIMES exp
-    8    | exp • DIVIDE exp
-   53 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp •
-
-    PLUS    shift, and go to state 41
-    MINUS   shift, and go to state 42
-    TIMES   shift, and go to state 43
-    DIVIDE  shift, and go to state 44
-
-    $default  reduce using rule 53 (func_dec)
-
-
-State 106
-
-   54 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID • EQ exp
-
-    EQ  shift, and go to state 107
-
-
-State 107
-
-   54 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ • exp
+   59 var_dec: VAR ID COLON ID ASSIGN • exp
 
     ID      shift, and go to state 1
     INT     shift, and go to state 2
@@ -1693,7 +1646,7 @@ State 107
     BREAK   shift, and go to state 7
     LPAREN  shift, and go to state 8
 
-    exp         go to state 108
+    exp         go to state 111
     var_exp     go to state 11
     var         go to state 12
     simple_var  go to state 13
@@ -1709,17 +1662,203 @@ State 107
     let_exp     go to state 23
 
 
+State 104
+
+   57 ty: ARRAY OF • ID
+
+    ID  shift, and go to state 112
+
+
+State 105
+
+   56 ty: LBRACE field_list • RBRACE
+
+    RBRACE  shift, and go to state 113
+
+
+State 106
+
+   44 for_exp: FOR ID ASSIGN exp TO exp DO • exp
+
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 114
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
+
+
+State 107
+
+   33 field: ID COLON ID •
+
+    $default  reduce using rule 33 (field)
+
+
 State 108
+
+   60 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ • exp
+
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 115
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
+
+
+State 109
+
+   61 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON • ID EQ exp
+
+    ID  shift, and go to state 116
+
+
+State 110
+
+   32 field_list_nonempty: field_list_nonempty COMMA field •
+
+    $default  reduce using rule 32 (field_list_nonempty)
+
+
+State 111
 
     5 exp: exp • PLUS exp
     6    | exp • MINUS exp
     7    | exp • TIMES exp
     8    | exp • DIVIDE exp
-   54 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp •
+   59 var_dec: VAR ID COLON ID ASSIGN exp •
 
     PLUS    shift, and go to state 41
     MINUS   shift, and go to state 42
     TIMES   shift, and go to state 43
     DIVIDE  shift, and go to state 44
 
-    $default  reduce using rule 54 (func_dec)
+    $default  reduce using rule 59 (var_dec)
+
+
+State 112
+
+   57 ty: ARRAY OF ID •
+
+    $default  reduce using rule 57 (ty)
+
+
+State 113
+
+   56 ty: LBRACE field_list RBRACE •
+
+    $default  reduce using rule 56 (ty)
+
+
+State 114
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   44 for_exp: FOR ID ASSIGN exp TO exp DO exp •
+
+    $default  reduce using rule 44 (for_exp)
+
+
+State 115
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   60 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp •
+
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+
+    $default  reduce using rule 60 (func_dec)
+
+
+State 116
+
+   61 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID • EQ exp
+
+    EQ  shift, and go to state 117
+
+
+State 117
+
+   61 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ • exp
+
+    ID      shift, and go to state 1
+    INT     shift, and go to state 2
+    IF      shift, and go to state 3
+    WHILE   shift, and go to state 4
+    FOR     shift, and go to state 5
+    LET     shift, and go to state 6
+    BREAK   shift, and go to state 7
+    LPAREN  shift, and go to state 8
+
+    exp         go to state 118
+    var_exp     go to state 11
+    var         go to state 12
+    simple_var  go to state 13
+    int_exp     go to state 14
+    call_exp    go to state 15
+    record_exp  go to state 16
+    seq_exp     go to state 17
+    assign_exp  go to state 18
+    if_exp      go to state 19
+    while_exp   go to state 20
+    for_exp     go to state 21
+    break_exp   go to state 22
+    let_exp     go to state 23
+
+
+State 118
+
+    5 exp: exp • PLUS exp
+    6    | exp • MINUS exp
+    7    | exp • TIMES exp
+    8    | exp • DIVIDE exp
+   61 func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp •
+
+    PLUS    shift, and go to state 41
+    MINUS   shift, and go to state 42
+    TIMES   shift, and go to state 43
+    DIVIDE  shift, and go to state 44
+
+    $default  reduce using rule 61 (func_dec)
