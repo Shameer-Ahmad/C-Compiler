@@ -1,11 +1,12 @@
 CC = gcc
 FLAGS = -Wall -Werror -std=c99 -D_XOPEN_SOURCE=700 -g
-APP = lextest
+APP1 = lextest
+APP2 = parser
 
-parser: util.o errormsg.o symbol.o table.o absyn.o lex.yy.o tiger.tab.o main.c
+$(APP2): util.o errormsg.o symbol.o table.o absyn.o lex.yy.o tiger.tab.o main.c
 	gcc $(FLAGS) $^ -o $@
 
-$(APP): driver.o lex.yy.o errormsg.o util.o
+$(APP1): driver.o lex.yy.o errormsg.o util.o
 	$(CC) $(FLAGS) $^ -o $@
 
 tiger.tab.o: tiger.tab.c
@@ -39,4 +40,4 @@ lex.yy.c: tiger.lex
 	lex $^
 
 clean: 
-	rm -f $(APP) parser *.o
+	rm -f $(APP1) $(APP2) *.o
