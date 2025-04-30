@@ -5,4 +5,5 @@ tiger.tab.h
 tiger.output
 lex.yy.c
 parser
+parser.dSYM/
 

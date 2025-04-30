@@ -1563,19 +1563,19 @@ yyreduce:
     {
   case 2: /* program: exp  */
 #line 69 "tiger.grm"
-             { (yyval.exp) = (yyvsp[0].exp); }
+             { (yyval.exp) = NULL; }
 #line 1568 "tiger.tab.c"
     break;
 
   case 3: /* exp: var_exp  */
 #line 71 "tiger.grm"
-             { (yyval.exp) = make_A_VarExp((yylsp[0]), (yyvsp[0].var)); }
+             { (yyval.exp) = NULL; }
 #line 1574 "tiger.tab.c"
     break;
 
   case 4: /* exp: int_exp  */
 #line 72 "tiger.grm"
-              { (yyval.exp) = (yyvsp[0].exp); }
+              { (yyval.exp) = NULL; }
 #line 1580 "tiger.tab.c"
     break;
 
@@ -1587,103 +1587,103 @@ yyreduce:
 
   case 6: /* exp: exp PLUS exp  */
 #line 74 "tiger.grm"
-                     { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_PLUS_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                     { (yyval.exp) = NULL; }
 #line 1592 "tiger.tab.c"
     break;
 
   case 7: /* exp: exp MINUS exp  */
 #line 75 "tiger.grm"
-                     { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_MINUS_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                     { (yyval.exp) = NULL; }
 #line 1598 "tiger.tab.c"
     break;
 
   case 8: /* exp: exp TIMES exp  */
 #line 76 "tiger.grm"
-                     { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_TIMES_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                     { (yyval.exp) = NULL; }
 #line 1604 "tiger.tab.c"
     break;
 
   case 9: /* exp: exp DIVIDE exp  */
 #line 77 "tiger.grm"
-                     { (yyval.exp) = make_A_OpExp((yylsp[-2]), A_DIVIDE_OP, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                     { (yyval.exp) = NULL; }
 #line 1610 "tiger.tab.c"
     break;
 
   case 10: /* exp: record_exp  */
 #line 78 "tiger.grm"
-                 { (yyval.exp) = (yyvsp[0].exp); }
+                 { NULL;}
 #line 1616 "tiger.tab.c"
     break;
 
   case 11: /* exp: seq_exp  */
 #line 79 "tiger.grm"
-              { (yyval.exp) = (yyvsp[0].exp); }
+              { NULL;}
 #line 1622 "tiger.tab.c"
     break;
 
   case 12: /* exp: assign_exp  */
 #line 80 "tiger.grm"
-                 { (yyval.exp) = (yyvsp[0].exp); }
+                 {(yyval.exp) = NULL; }
 #line 1628 "tiger.tab.c"
     break;
 
   case 13: /* exp: if_exp  */
 #line 81 "tiger.grm"
-             { (yyval.exp) = (yyvsp[0].exp); }
+             { (yyval.exp) = NULL; }
 #line 1634 "tiger.tab.c"
     break;
 
   case 14: /* exp: while_exp  */
 #line 82 "tiger.grm"
-                { (yyval.exp) = (yyvsp[0].exp); }
+                { (yyval.exp) = NULL; }
 #line 1640 "tiger.tab.c"
     break;
 
   case 15: /* exp: for_exp  */
 #line 83 "tiger.grm"
-              { (yyval.exp) = (yyvsp[0].exp); }
+              { (yyval.exp) = NULL;}
 #line 1646 "tiger.tab.c"
     break;
 
   case 16: /* exp: break_exp  */
 #line 84 "tiger.grm"
-                { (yyval.exp) = (yyvsp[0].exp); }
+                { (yyval.exp) = NULL;}
 #line 1652 "tiger.tab.c"
     break;
 
   case 17: /* exp: let_exp  */
 #line 85 "tiger.grm"
-              { (yyval.exp) = (yyvsp[0].exp); }
+              { (yyval.exp) = NULL; }
 #line 1658 "tiger.tab.c"
     break;
 
   case 18: /* var_exp: var  */
 #line 87 "tiger.grm"
-             { (yyval.var) = (yyvsp[0].var); }
+             { (yyval.var) = NULL; }
 #line 1664 "tiger.tab.c"
     break;
 
   case 19: /* var: simple_var  */
 #line 89 "tiger.grm"
-                { (yyval.var) = (yyvsp[0].var); }
+                { (yyval.var) = NULL; }
 #line 1670 "tiger.tab.c"
     break;
 
   case 20: /* simple_var: ID  */
 #line 91 "tiger.grm"
-               { (yyval.var) = make_A_SimpleVar((yylsp[0]), make_S_Symbol((yyvsp[0].sval))); }
+               { (yyval.var) = NULL; }
 #line 1676 "tiger.tab.c"
     break;
 
   case 21: /* int_exp: INT  */
 #line 93 "tiger.grm"
-             { (yyval.exp) = make_A_IntExp((yylsp[0]), (yyvsp[0].ival)); }
+             { (yyval.exp) = NULL; }
 #line 1682 "tiger.tab.c"
     break;
 
   case 22: /* call_exp: ID LPAREN args RPAREN  */
 #line 95 "tiger.grm"
-                                { (yyval.exp) = make_A_CallExp((yylsp[-3]), make_S_Symbol((yyvsp[-3].sval)), NULL); }
+                                { (yyval.exp) = NULL; }
 #line 1688 "tiger.tab.c"
     break;
 
@@ -1695,7 +1695,7 @@ yyreduce:
 
   case 24: /* args: exp_list  */
 #line 98 "tiger.grm"
-               { (yyval.explist) = (yyvsp[0].explist); }
+               { (yyval.explist) = NULL; }
 #line 1700 "tiger.tab.c"
     break;
 
@@ -1707,25 +1707,25 @@ yyreduce:
 
   case 26: /* exp_list: exp_list COMMA exp  */
 #line 102 "tiger.grm"
-                         { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), (yyvsp[-2].explist)); }
+                         { (yyval.explist) = NULL; }
 #line 1712 "tiger.tab.c"
     break;
 
   case 27: /* exp_seq: exp  */
 #line 105 "tiger.grm"
-             { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), NULL); }
+             { (yyval.explist) = NULL; }
 #line 1718 "tiger.tab.c"
     break;
 
   case 28: /* exp_seq: exp_seq SEMICOLON exp  */
 #line 106 "tiger.grm"
-                            { (yyval.explist) = make_A_ExpList((yyvsp[0].exp), (yyvsp[-2].explist)); }
+                            { (yyval.explist) = NULL; }
 #line 1724 "tiger.tab.c"
     break;
 
   case 29: /* record_exp: ID LBRACE efield_list RBRACE  */
 #line 110 "tiger.grm"
-          { (yyval.exp) = make_A_RecordExp((yylsp[-3]), make_S_Symbol((yyvsp[-3].sval)), (yyvsp[-1].efieldlist)); }
+          { (yyval.exp) = NULL; }
 #line 1730 "tiger.tab.c"
     break;
 
@@ -1737,25 +1737,25 @@ yyreduce:
 
   case 31: /* field_list: field_list_nonempty  */
 #line 113 "tiger.grm"
-                                { (yyval.fieldlist) = (yyvsp[0].fieldlist); }
+                                { (yyval.fieldlist) = NULL; }
 #line 1742 "tiger.tab.c"
     break;
 
   case 32: /* field_list_nonempty: field  */
 #line 116 "tiger.grm"
-                           { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), NULL); }
+                           { (yyval.fieldlist) = NULL; }
 #line 1748 "tiger.tab.c"
     break;
 
   case 33: /* field_list_nonempty: field_list_nonempty COMMA field  */
 #line 117 "tiger.grm"
-                                                     { (yyval.fieldlist) = make_A_FieldList((yyvsp[0].field), (yyvsp[-2].fieldlist)); }
+                                                     { (yyval.fieldlist) = NULL; }
 #line 1754 "tiger.tab.c"
     break;
 
   case 34: /* field: ID COLON ID  */
 #line 120 "tiger.grm"
-                   { (yyval.field) = make_A_Field((yylsp[-2]), make_S_Symbol((yyvsp[-2].sval)), make_S_Symbol((yyvsp[0].sval))); }
+                   { (yyval.field) = NULL; }
 #line 1760 "tiger.tab.c"
     break;
 
@@ -1767,73 +1767,73 @@ yyreduce:
 
   case 36: /* efield_list: efield_list_nonempty  */
 #line 123 "tiger.grm"
-                                  { (yyval.efieldlist) = (yyvsp[0].efieldlist); }
+                                  { (yyval.efieldlist) = NULL; }
 #line 1772 "tiger.tab.c"
     break;
 
   case 37: /* efield_list_nonempty: efield  */
 #line 126 "tiger.grm"
-                             { (yyval.efieldlist) = make_A_EFieldList((yyvsp[0].efield), NULL); }
+                             { (yyval.efieldlist) = NULL; }
 #line 1778 "tiger.tab.c"
     break;
 
   case 38: /* efield_list_nonempty: efield_list_nonempty COMMA efield  */
 #line 127 "tiger.grm"
-                                                        { (yyval.efieldlist) = make_A_EFieldList((yyvsp[0].efield), (yyvsp[-2].efieldlist)); }
+                                                        { (yyval.efieldlist) = NULL; }
 #line 1784 "tiger.tab.c"
     break;
 
   case 39: /* efield: ID EQ exp  */
 #line 130 "tiger.grm"
-                  { (yyval.efield) = make_A_EField(make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
+                  { (yyval.efield) = NULL; }
 #line 1790 "tiger.tab.c"
     break;
 
   case 40: /* seq_exp: LPAREN exp_seq RPAREN  */
 #line 133 "tiger.grm"
-                               { (yyval.exp) = make_A_SeqExp((yylsp[-2]), (yyvsp[-1].explist)); }
+                               { (yyval.exp) = NULL; }
 #line 1796 "tiger.tab.c"
     break;
 
   case 41: /* assign_exp: var ASSIGN exp  */
 #line 136 "tiger.grm"
-                           { (yyval.exp) = make_A_AssignExp((yylsp[-2]), (yyvsp[-2].var), (yyvsp[0].exp)); }
+                           { (yyval.exp) = NULL; }
 #line 1802 "tiger.tab.c"
     break;
 
   case 42: /* if_exp: IF exp THEN exp  */
 #line 139 "tiger.grm"
-                                              { (yyval.exp) = make_A_IfExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp), NULL); }
+                                              { (yyval.exp) = NULL;}
 #line 1808 "tiger.tab.c"
     break;
 
   case 43: /* if_exp: IF exp THEN exp ELSE exp  */
 #line 140 "tiger.grm"
-                               { (yyval.exp) = make_A_IfExp((yylsp[-5]), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                               { (yyval.exp) = NULL; }
 #line 1814 "tiger.tab.c"
     break;
 
   case 44: /* while_exp: WHILE exp DO exp  */
 #line 143 "tiger.grm"
-                                                 { (yyval.exp) = make_A_WhileExp((yylsp[-3]), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                                                 { (yyval.exp) = NULL; }
 #line 1820 "tiger.tab.c"
     break;
 
   case 45: /* for_exp: FOR ID ASSIGN exp TO exp DO exp  */
 #line 146 "tiger.grm"
-                                                              { (yyval.exp) = make_A_ForExp((yylsp[-7]), make_S_Symbol((yyvsp[-6].sval)), (yyvsp[-4].exp), (yyvsp[-2].exp), (yyvsp[0].exp)); }
+                                                              { (yyval.exp) = NULL; }
 #line 1826 "tiger.tab.c"
     break;
 
   case 46: /* break_exp: BREAK  */
 #line 149 "tiger.grm"
-                 { (yyval.exp) = make_A_BreakExp((yylsp[0])); }
+                 { (yyval.exp) = NULL; }
 #line 1832 "tiger.tab.c"
     break;
 
   case 47: /* let_exp: LET dec_list IN exp_list END  */
 #line 152 "tiger.grm"
-                                      { (yyval.exp) = make_A_LetExp((yylsp[-4]), (yyvsp[-3].declist), make_A_SeqExp((yylsp[-1]), (yyvsp[-1].explist))); }
+                                      { (yyval.exp) = NULL; }
 #line 1838 "tiger.tab.c"
     break;
 
@@ -1845,80 +1845,80 @@ yyreduce:
 
   case 49: /* dec_list: dec_list_nonempty  */
 #line 156 "tiger.grm"
-                        { (yyval.declist) = (yyvsp[0].declist); }
+                        { (yyval.declist) = NULL; }
 #line 1850 "tiger.tab.c"
     break;
 
   case 50: /* dec_list_nonempty: dec  */
 #line 159 "tiger.grm"
-                       { (yyval.declist) = make_A_DecList((yyvsp[0].dec), NULL); }
+                       { (yyval.declist) = NULL; }
 #line 1856 "tiger.tab.c"
     break;
 
   case 51: /* dec_list_nonempty: dec_list_nonempty dec  */
 #line 160 "tiger.grm"
-                            { (yyval.declist) = make_A_DecList((yyvsp[0].dec), (yyvsp[-1].declist)); }
+                            { (yyval.declist) = NULL; }
 #line 1862 "tiger.tab.c"
     break;
 
   case 52: /* dec: type_dec  */
 #line 163 "tiger.grm"
-              { (yyval.dec) = (yyvsp[0].dec); }
+              { (yyval.dec) = NULL;}
 #line 1868 "tiger.tab.c"
     break;
 
   case 53: /* dec: var_dec  */
 #line 164 "tiger.grm"
-              { (yyval.dec) = (yyvsp[0].dec); }
+              { (yyval.dec) = NULL; }
 #line 1874 "tiger.tab.c"
     break;
 
   case 54: /* dec: func_dec  */
 #line 165 "tiger.grm"
-               { (yyval.dec) = (yyvsp[0].dec); }
+               { (yyval.dec) = NULL; }
 #line 1880 "tiger.tab.c"
     break;
 
   case 55: /* type_dec: TYPE ID EQ ty  */
 #line 168 "tiger.grm"
-                        { (yyval.dec) = make_A_TypeDecGroup((yylsp[-3]), make_A_TypeDecList(make_A_TypeDec(make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].type)), NULL)); }
+                        { (yyval.dec) = NULL; }
 #line 1886 "tiger.tab.c"
     break;
 
   case 56: /* ty: ID  */
 #line 171 "tiger.grm"
-       { (yyval.type) = make_A_NameType((yylsp[0]), make_S_Symbol((yyvsp[0].sval))); }
+       { (yyval.type) = NULL; }
 #line 1892 "tiger.tab.c"
     break;
 
   case 57: /* ty: LBRACE field_list RBRACE  */
 #line 172 "tiger.grm"
-                               { (yyval.type) = make_A_RecordType((yylsp[-2]), (yyvsp[-1].fieldlist)); }
+                               { (yyval.type) = NULL; }
 #line 1898 "tiger.tab.c"
     break;
 
   case 58: /* ty: ARRAY OF ID  */
 #line 173 "tiger.grm"
-                  { (yyval.type) = make_A_ArrayType((yylsp[-2]), make_S_Symbol((yyvsp[0].sval))); }
+                  { (yyval.type) = NULL;}
 #line 1904 "tiger.tab.c"
     break;
 
   case 59: /* var_dec: VAR ID ASSIGN exp  */
 #line 176 "tiger.grm"
-                           { (yyval.dec) = make_A_VarDec((yylsp[-3]), make_S_Symbol((yyvsp[-2].sval)), NULL, (yyvsp[0].exp)); }
+                           { (yyval.dec) = NULL; }
 #line 1910 "tiger.tab.c"
     break;
 
   case 60: /* var_dec: VAR ID COLON ID ASSIGN exp  */
 #line 177 "tiger.grm"
-                                 { (yyval.dec) = make_A_VarDec((yylsp[-5]), make_S_Symbol((yyvsp[-4].sval)), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)); }
+                                 { (yyval.dec) = NULL; }
 #line 1916 "tiger.tab.c"
     break;
 
   case 61: /* func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp  */
 #line 180 "tiger.grm"
                                                       {
-    (yyval.dec) = make_A_FunctionDecGroup((yylsp[-6]), make_A_FunDecList(make_A_FunDec((yylsp[-6]), make_S_Symbol((yyvsp[-5].sval)), (yyvsp[-3].fieldlist), NULL, (yyvsp[0].exp)), NULL));
+    (yyval.dec) = NULL;
 }
 #line 1924 "tiger.tab.c"
     break;
@@ -1926,7 +1926,7 @@ yyreduce:
   case 62: /* func_dec: FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp  */
 #line 183 "tiger.grm"
                                                        {
-    (yyval.dec) = make_A_FunctionDecGroup((yylsp[-8]), make_A_FunDecList(make_A_FunDec((yylsp[-8]), make_S_Symbol((yyvsp[-7].sval)), (yyvsp[-5].fieldlist), make_S_Symbol((yyvsp[-2].sval)), (yyvsp[0].exp)), NULL));
+    (yyval.dec) = NULL;
 }
 #line 1932 "tiger.tab.c"
     break;

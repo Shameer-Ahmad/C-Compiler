@@ -40,4 +40,4 @@ lex.yy.c: tiger.lex
 	lex $^
 
 clean: 
-	rm -f $(APP1) $(APP2) *.o
+	rm -f $(APP1) $(APP2) *.o tiger.tab.c tiger.tab.h tiger.tab.output

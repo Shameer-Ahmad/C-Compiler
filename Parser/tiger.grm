@@ -66,122 +66,122 @@ void yyerror(E_Pos *locp, const char *s);
 
 %%
 
-program: exp { $$ = $1; };
+program: exp { $$ = NULL; };
 
-exp: var_exp { $$ = make_A_VarExp(@1, $1); }
-    | int_exp { $$ = $1; }
+exp: var_exp { $$ = NULL; }
+    | int_exp { $$ = NULL; }
     | call_exp { $$ = $1; }
-    | exp PLUS exp   { $$ = make_A_OpExp(@1, A_PLUS_OP, $1, $3); }
-    | exp MINUS exp  { $$ = make_A_OpExp(@1, A_MINUS_OP, $1, $3); }
-    | exp TIMES exp  { $$ = make_A_OpExp(@1, A_TIMES_OP, $1, $3); }
-    | exp DIVIDE exp { $$ = make_A_OpExp(@1, A_DIVIDE_OP, $1, $3); }
-    | record_exp { $$ = $1; }
-    | seq_exp { $$ = $1; }
-    | assign_exp { $$ = $1; }
-    | if_exp { $$ = $1; }
-    | while_exp { $$ = $1; }
-    | for_exp { $$ = $1; }
-    | break_exp { $$ = $1; }
-    | let_exp { $$ = $1; };
+    | exp PLUS exp   { $$ = NULL; }
+    | exp MINUS exp  { $$ = NULL; }
+    | exp TIMES exp  { $$ = NULL; }
+    | exp DIVIDE exp { $$ = NULL; }
+    | record_exp { NULL;}
+    | seq_exp { NULL;}
+    | assign_exp {$$ = NULL; }
+    | if_exp { $$ = NULL; }
+    | while_exp { $$ = NULL; }
+    | for_exp { $$ = NULL;}
+    | break_exp { $$ = NULL;}
+    | let_exp { $$ = NULL; };
 
-var_exp: var { $$ = $1; }
+var_exp: var { $$ = NULL; }
 
-var: simple_var { $$ = $1; };
+var: simple_var { $$ = NULL; };
 
-simple_var: ID { $$ = make_A_SimpleVar(@1, make_S_Symbol($1)); };
+simple_var: ID { $$ = NULL; };
 
-int_exp: INT { $$ = make_A_IntExp(@1, $1); };
+int_exp: INT { $$ = NULL; };
 
-call_exp: ID LPAREN args RPAREN { $$ = make_A_CallExp(@1, make_S_Symbol($1), NULL); };
+call_exp: ID LPAREN args RPAREN { $$ = NULL; };
 
 args: /* empty */ { $$ = NULL; }
-    | exp_list { $$ = $1; }
+    | exp_list { $$ = NULL; }
     ;
 
 exp_list: exp { $$ = make_A_ExpList($1, NULL); }
-    | exp_list COMMA exp { $$ = make_A_ExpList($3, $1); }
+    | exp_list COMMA exp { $$ = NULL; }
     ;
 
-exp_seq: exp { $$ = make_A_ExpList($1, NULL); }
-    | exp_seq SEMICOLON exp { $$ = make_A_ExpList($3, $1); }
+exp_seq: exp { $$ = NULL; }
+    | exp_seq SEMICOLON exp { $$ = NULL; }
     ;
 
 record_exp: ID LBRACE efield_list RBRACE
-          { $$ = make_A_RecordExp(@1, make_S_Symbol($1), $3); };
+          { $$ = NULL; };
 
 field_list: /* empty */ { $$ = NULL; }
-          | field_list_nonempty { $$ = $1; }
+          | field_list_nonempty { $$ = NULL; }
           ;
 
-field_list_nonempty: field { $$ = make_A_FieldList($1, NULL); }
-                   | field_list_nonempty COMMA field { $$ = make_A_FieldList($3, $1); }
+field_list_nonempty: field { $$ = NULL; }
+                   | field_list_nonempty COMMA field { $$ = NULL; }
                    ;
 
-field: ID COLON ID { $$ = make_A_Field(@1, make_S_Symbol($1), make_S_Symbol($3)); };
+field: ID COLON ID { $$ = NULL; };
 
 efield_list: /* empty */ { $$ = NULL; }
-           | efield_list_nonempty { $$ = $1; }
+           | efield_list_nonempty { $$ = NULL; }
            ;
 
-efield_list_nonempty: efield { $$ = make_A_EFieldList($1, NULL); }
-                    | efield_list_nonempty COMMA efield { $$ = make_A_EFieldList($3, $1); }
+efield_list_nonempty: efield { $$ = NULL; }
+                    | efield_list_nonempty COMMA efield { $$ = NULL; }
                     ;
 
-efield: ID EQ exp { $$ = make_A_EField(make_S_Symbol($1), $3); };
+efield: ID EQ exp { $$ = NULL; };
 
 
-seq_exp: LPAREN exp_seq RPAREN { $$ = make_A_SeqExp(@1, $2); }
+seq_exp: LPAREN exp_seq RPAREN { $$ = NULL; }
     ;
 
-assign_exp: var ASSIGN exp { $$ = make_A_AssignExp(@1, $1, $3); }
+assign_exp: var ASSIGN exp { $$ = NULL; }
     ;
 
-if_exp: IF exp THEN exp %prec LOWER_THAN_ELSE { $$ = make_A_IfExp(@1, $2, $4, NULL); }
-    | IF exp THEN exp ELSE exp { $$ = make_A_IfExp(@1, $2, $4, $6); }
+if_exp: IF exp THEN exp %prec LOWER_THAN_ELSE { $$ = NULL;}
+    | IF exp THEN exp ELSE exp { $$ = NULL; }
     ;
 
-while_exp: WHILE exp DO exp %prec LOW_PRECEDENCE { $$ = make_A_WhileExp(@1, $2, $4); }
+while_exp: WHILE exp DO exp %prec LOW_PRECEDENCE { $$ = NULL; }
     ;
 
-for_exp: FOR ID ASSIGN exp TO exp DO exp %prec LOW_PRECEDENCE { $$ = make_A_ForExp(@1, make_S_Symbol($2), $4, $6, $8); }
+for_exp: FOR ID ASSIGN exp TO exp DO exp %prec LOW_PRECEDENCE { $$ = NULL; }
     ;
 
-break_exp: BREAK { $$ = make_A_BreakExp(@1); }
+break_exp: BREAK { $$ = NULL; }
     ;
 
-let_exp: LET dec_list IN exp_list END { $$ = make_A_LetExp(@1, $2, make_A_SeqExp(@4, $4)); }
+let_exp: LET dec_list IN exp_list END { $$ = NULL; }
     ;
 
 dec_list: /* empty */ { $$ = NULL; }
-    | dec_list_nonempty { $$ = $1; }
+    | dec_list_nonempty { $$ = NULL; }
     ;
 
-dec_list_nonempty: dec { $$ = make_A_DecList($1, NULL); }
-    | dec_list_nonempty dec { $$ = make_A_DecList($2, $1); }
+dec_list_nonempty: dec { $$ = NULL; }
+    | dec_list_nonempty dec { $$ = NULL; }
     ;
 
-dec: type_dec { $$ = $1; }
-    | var_dec { $$ = $1; }
-    | func_dec { $$ = $1; }
+dec: type_dec { $$ = NULL;}
+    | var_dec { $$ = NULL; }
+    | func_dec { $$ = NULL; }
     ;
 
-type_dec: TYPE ID EQ ty { $$ = make_A_TypeDecGroup(@1, make_A_TypeDecList(make_A_TypeDec(make_S_Symbol($2), $4), NULL)); };
+type_dec: TYPE ID EQ ty { $$ = NULL; };
 
 
-ty: ID { $$ = make_A_NameType(@1, make_S_Symbol($1)); }
-    | LBRACE field_list RBRACE { $$ = make_A_RecordType(@1, $2); }
-    | ARRAY OF ID { $$ = make_A_ArrayType(@1, make_S_Symbol($3)); }
+ty: ID { $$ = NULL; }
+    | LBRACE field_list RBRACE { $$ = NULL; }
+    | ARRAY OF ID { $$ = NULL;}
     ;
 
-var_dec: VAR ID ASSIGN exp { $$ = make_A_VarDec(@1, make_S_Symbol($2), NULL, $4); }
-    | VAR ID COLON ID ASSIGN exp { $$ = make_A_VarDec(@1, make_S_Symbol($2), make_S_Symbol($4), $6); }
+var_dec: VAR ID ASSIGN exp { $$ = NULL; }
+    | VAR ID COLON ID ASSIGN exp { $$ = NULL; }
     ;
 
 func_dec: FUNCTION ID LPAREN field_list RPAREN EQ exp {
-    $$ = make_A_FunctionDecGroup(@1, make_A_FunDecList(make_A_FunDec(@1, make_S_Symbol($2), $4, NULL, $7), NULL));
+    $$ = NULL;
 }
 | FUNCTION ID LPAREN field_list RPAREN COLON ID EQ exp {
-    $$ = make_A_FunctionDecGroup(@1, make_A_FunDecList(make_A_FunDec(@1, make_S_Symbol($2), $4, make_S_Symbol($7), $9), NULL));
+    $$ = NULL;
 };
 
 %% 

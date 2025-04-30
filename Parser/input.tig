@@ -1,9 +1,1 @@
-let 
-    var shameer11ahmad := 42
-    var _y := 100
-    var message := "Hello World!"
-    /* This is a comment. /* This is a nested comment */ */
-    function add(a: int, b: int): int = a + b
-in
-    add(x, _y)
-end
+42
